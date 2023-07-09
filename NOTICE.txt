@@ -1,0 +1,38 @@
+NOTICE
+
+This file includes additional attribution notices and information about third-party dependencies included in Dokunex.
+
+- react: JavaScript library for building user interfaces.
+  - License: MIT License
+  - Copyright Facebook, Inc. and its affiliates.
+  - Repository: https://github.com/facebook/react
+
+- next.js: The React Framework for Production.
+  - License: MIT License
+  - Copyright 2021 Vercel
+  - Repository: https://github.com/vercel/next.js
+
+- typescript: TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.
+  - License: Apache License 2.0
+  - Copyright Microsoft Corporation
+  - Repository: https://github.com/microsoft/TypeScript
+
+- eslint: Pluggable JavaScript linter.
+  - License: MIT License
+  - Copyright Nicholas C. Zakas
+  - Repository: https://github.com/eslint/eslint
+
+- prettier: Opinionated code formatter.
+  - License: MIT License
+  - Copyright Prettier contributors
+  - Repository: https://github.com/prettier/prettier
+
+- cypress: JavaScript end-to-end testing framework.
+  - License: MIT License
+  - Copyright Cypress.io
+  - Repository: https://github.com/cypress-io/cypress
+
+[Add separate sections for each third-party dependency used in Dokunex]
+
+[Include relevant information and notices for each dependency]
+
