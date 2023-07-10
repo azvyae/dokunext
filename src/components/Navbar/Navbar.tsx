@@ -15,7 +15,17 @@ function Navbar() {
       {item.name}
     </option>
   ));
-  const toggleSidebar = useSidebarStore((state) => state.toggleSidebar);
+  const toggleSidebar = useSidebarStore((state) => {
+    if (typeof document !== 'undefined') {
+      const bodyClasses = document.body.classList;
+      if (state.open) {
+        bodyClasses.add('overflow-hidden');
+      } else {
+        bodyClasses.remove('overflow-hidden');
+      }
+    }
+    return state.toggleSidebar;
+  });
   return (
     <nav className="fixed z-40 flex justify-between w-full px-4 py-4 md:px-16 bg-slate-800">
       <Link href="/">

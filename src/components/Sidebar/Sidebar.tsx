@@ -1,9 +1,10 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Modal } from '../Modal/Modal';
 import { BiLock as LockIcon } from 'react-icons/bi';
 import { AuthorizationModal } from './Partials/AuthorizationModal';
 import { useSidebarStore } from '@/store/store';
+import Link from 'next/link';
 interface Collections {
   name: string;
   url: string;
@@ -28,6 +29,23 @@ function Sidebar() {
   const [collections, setCollections] = useState<Collections[]>([]);
   const insertTokenModal = useRef<HTMLDialogElement>(null);
   const sidebarOpen = useSidebarStore((state) => state.open);
+  const collectionNodes = !(collections.length > 0) ? (
+    <p className="text-sm">No Collection or Definition Available</p>
+  ) : (
+    collections.map((item) => (
+      <li key={item.url} className="text-sm">
+        <Link href={item.url}>{item.name}</Link>
+      </li>
+    ))
+  );
+  function handleProviderChange(e: ChangeEvent<HTMLSelectElement>) {
+    const currentValue = e.currentTarget.value;
+    if (currentValue !== 'Postman' && currentValue !== 'OpenAPI') {
+      throw Error('Provider not found');
+    }
+    setProvider(currentValue);
+  }
+
   function openAuthModal() {
     if (!insertTokenModal.current) {
       return;
@@ -54,14 +72,14 @@ function Sidebar() {
       const res = await getApiDefinitions(token, provider);
       if (!res.ok) {
         if (res.status === 401) {
-          openAuthModal();
+          return openAuthModal();
         } else {
           throw new Error('HTTP Error: ' + res.status);
         }
       }
     }
     retrieveData();
-  });
+  }, [provider]);
   return (
     <>
       <Modal ref={insertTokenModal}>
@@ -72,8 +90,24 @@ function Sidebar() {
           sidebarOpen ? 'block' : 'hidden'
         }`}
       >
-        <div className="flex flex-col justify-between h-full p-4 bg-slate-700 ">
-          <div></div>
+        <div className="fixed flex flex-col w-full md:w-[16vw] justify-between h-full p-4 pt-20 bg-slate-700">
+          <div>
+            <p className="mb-2 text-slate-50">Provider:</p>
+            <select
+              name="provider"
+              id="provider-selector"
+              className="w-full px-2 py-1 pr-4 mb-4 rounded-md md:px-4 text-slate-900"
+              value={provider}
+              onChange={handleProviderChange}
+            >
+              <option value="Postman">Postman</option>
+              {/* <option value="OpenAPI">OpenAPI</option> */}
+            </select>
+            <p className="mb-2 text-slate-50">Collections/Definitions:</p>
+            <div className="h-[50vh] overflow-y-auto border border-slate-500 rounded-md p-2">
+              <ul className="list-disc text-slate-50">{collectionNodes}</ul>
+            </div>
+          </div>
           <button
             onClick={openAuthModal}
             className="flex items-center justify-center gap-2 p-2 text-lg bg-yellow-400 rounded-lg hover:bg-yellow-500"

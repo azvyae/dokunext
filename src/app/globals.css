@@ -8,6 +8,22 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+::-webkit-scrollbar {
+  @apply absolute w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#F5F5F5] rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#9ba6d3] rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#5364aa];
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
