@@ -1,3 +1,5 @@
-export function Sidebar() {
+function Sidebar() {
   return <div>Sidebar</div>;
 }
+
+export { Sidebar };

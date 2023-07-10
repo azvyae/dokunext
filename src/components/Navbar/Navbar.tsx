@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export function Navbar() {
+function Navbar() {
   return (
     <nav className="flex justify-between px-16 py-4 bg-slate-800">
       <Link href="/">
@@ -18,3 +18,5 @@ export function Navbar() {
     </nav>
   );
 }
+
+export { Navbar };
