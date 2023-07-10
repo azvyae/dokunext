@@ -19,11 +19,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <header>
           <Navbar />
         </header>
-        <div className="grid flex-grow grid-cols-6">
-          <aside className="col-span-1">
+        <div className="relative grid flex-grow md:grid-cols-6">
+          <aside className=" md:col-span-2 lg:col-span-2 xl:col-span-1">
             <Sidebar />
           </aside>
-          <main className="col-span-5">{children}</main>
+          <main className="lg:col-span-4 xl:col-span-5">{children}</main>
         </div>
         <footer className="p-2 dark:bg-neutral-900 bg-neutral-300">
           <Footer />

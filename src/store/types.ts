@@ -10,4 +10,9 @@ interface EnvironmentState {
   setEnvironments: (environments: Environment[]) => void;
 }
 
-export type { Environment, EnvironmentState };
+interface SidebarState {
+  open: boolean;
+  toggleSidebar: () => void;
+}
+
+export type { Environment, EnvironmentState, SidebarState };

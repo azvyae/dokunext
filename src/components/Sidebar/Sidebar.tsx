@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Modal } from '../Modal/Modal';
-import Image from 'next/image';
-import Lock from './lock.svg';
+import { BiLock as LockIcon } from 'react-icons/bi';
 import { AuthorizationModal } from './Partials/AuthorizationModal';
+import { useSidebarStore } from '@/store/store';
 interface Collections {
   name: string;
   url: string;
@@ -27,7 +27,7 @@ function Sidebar() {
   const [provider, setProvider] = useState<Provider>('Postman');
   const [collections, setCollections] = useState<Collections[]>([]);
   const insertTokenModal = useRef<HTMLDialogElement>(null);
-
+  const sidebarOpen = useSidebarStore((state) => state.open);
   function openAuthModal() {
     if (!insertTokenModal.current) {
       return;
@@ -67,15 +67,21 @@ function Sidebar() {
       <Modal ref={insertTokenModal}>
         <AuthorizationModal closeModal={closeAuthModal} />
       </Modal>
-      <div className="flex flex-col justify-between h-full p-4 bg-slate-700">
-        <div></div>
-        <button
-          onClick={openAuthModal}
-          className="flex items-center justify-center gap-2 p-2 text-lg bg-yellow-400 rounded-lg hover:bg-yellow-500"
-        >
-          <Image src={Lock} alt={'Authorize Access'} width={24} height={24} />
-          <p>Authorize</p>
-        </button>
+      <div
+        className={`fixed w-full h-full md:static md:block ${
+          sidebarOpen ? 'block' : 'hidden'
+        }`}
+      >
+        <div className="flex flex-col justify-between h-full p-4 bg-slate-700 ">
+          <div></div>
+          <button
+            onClick={openAuthModal}
+            className="flex items-center justify-center gap-2 p-2 text-lg bg-yellow-400 rounded-lg hover:bg-yellow-500"
+          >
+            <LockIcon size={20} />
+            <p>Authorize</p>
+          </button>
+        </div>
       </div>
     </>
   );
