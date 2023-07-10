@@ -23,7 +23,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           <aside className="md:col-span-2 lg:col-span-1">
             <Sidebar />
           </aside>
-          <main className="px-4 pt-24 pb-4 md:col-span-4 lg:col-span-5">
+          <main className="w-full px-4 pt-24 pb-4 overflow-auto  md:col-span-4 lg:col-span-5">
             {children}
           </main>
         </div>
