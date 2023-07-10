@@ -22,8 +22,11 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/openapi')) {
     return authorize(authorizationHeader);
   }
+  if (request.nextUrl.pathname.startsWith('/auth')) {
+    return authorize(authorizationHeader);
+  }
   return NextResponse.next();
 }
 export const config = {
-  matcher: ['/postman/:path*', '/openapi/:path*']
+  matcher: ['/auth', '/postman/:path*', '/openapi/:path*']
 };
