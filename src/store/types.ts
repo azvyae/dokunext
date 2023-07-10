@@ -6,6 +6,8 @@ interface Environment {
 interface EnvironmentState {
   active: Environment['value'];
   environments: Environment[];
+  setActive: (value: string) => void;
+  setEnvironments: (environments: Environment[]) => void;
 }
 
 export type { Environment, EnvironmentState };

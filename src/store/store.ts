@@ -5,7 +5,7 @@ import { Environment, EnvironmentState } from './types';
 const useEnvironmentStore = create<EnvironmentState>()(
   devtools((set) => ({
     active: 'none',
-    environments: [{ name: 'No Environment', value: 'none' }],
+    environments: [],
     setActive: (value: string) => set(() => ({ active: value })),
     setEnvironments: (environments: Environment[]) =>
       set(() => ({ environments: environments }))
