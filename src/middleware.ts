@@ -16,17 +16,29 @@ function authorize(authorizationHeader: string | null) {
 
 export function middleware(request: NextRequest) {
   const authorizationHeader = request.headers.get('Authorization');
-  if (request.nextUrl.pathname.startsWith('/postman')) {
+  if (request.nextUrl.pathname.match('/postman')) {
     return authorize(authorizationHeader);
   }
-  if (request.nextUrl.pathname.startsWith('/openapi')) {
+  if (request.nextUrl.pathname.startsWith('/postman/api')) {
     return authorize(authorizationHeader);
   }
-  if (request.nextUrl.pathname.startsWith('/auth')) {
+  if (request.nextUrl.pathname.match('/openapi')) {
+    return authorize(authorizationHeader);
+  }
+  if (request.nextUrl.pathname.startsWith('/openapi/api')) {
+    return authorize(authorizationHeader);
+  }
+  if (request.nextUrl.pathname.match('/auth')) {
     return authorize(authorizationHeader);
   }
   return NextResponse.next();
 }
 export const config = {
-  matcher: ['/auth', '/postman/:path*', '/openapi/:path*']
+  matcher: [
+    '/auth',
+    '/postman',
+    '/openapi',
+    '/postman/api/:path*',
+    '/openapi/api/:path*'
+  ]
 };

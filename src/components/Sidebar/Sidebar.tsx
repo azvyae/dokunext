@@ -30,11 +30,13 @@ function Sidebar() {
   const insertTokenModal = useRef<HTMLDialogElement>(null);
   const sidebarOpen = useSidebarStore((state) => state.open);
   const collectionNodes = !(collections.length > 0) ? (
-    <p className="text-sm">No Collection or Definition Available</p>
+    <li className="text-sm">No Collection or Definition Available</li>
   ) : (
     collections.map((item) => (
-      <li key={item.url} className="text-sm">
-        <Link href={item.url}>{item.name}</Link>
+      <li key={item.url} className="my-3 text-sm">
+        <Link href={item.url} className=" hover:underline hover:text-sky-200">
+          {item.name}
+        </Link>
       </li>
     ))
   );
@@ -77,6 +79,8 @@ function Sidebar() {
           throw new Error('HTTP Error: ' + res.status);
         }
       }
+      const collectionResponse = await res.json();
+      return setCollections(collectionResponse.data);
     }
     retrieveData();
   }, [provider]);
@@ -90,7 +94,7 @@ function Sidebar() {
           sidebarOpen ? 'block' : 'hidden'
         }`}
       >
-        <div className="fixed flex flex-col w-full md:w-[16vw] justify-between h-full p-4 pt-20 bg-slate-700">
+        <div className="fixed flex flex-col w-full md:w-[30vw] lg:w-[16vw] justify-between h-full p-4 pt-20 bg-slate-700">
           <div>
             <p className="mb-2 text-slate-50">Provider:</p>
             <select
@@ -103,7 +107,7 @@ function Sidebar() {
               <option value="Postman">Postman</option>
               {/* <option value="OpenAPI">OpenAPI</option> */}
             </select>
-            <p className="mb-2 text-slate-50">Collections/Definitions:</p>
+            <p className="mb-2 text-slate-50">Collections:</p>
             <div className="h-[50vh] overflow-y-auto border border-slate-500 rounded-md p-2">
               <ul className="list-disc text-slate-50">{collectionNodes}</ul>
             </div>
@@ -122,3 +126,4 @@ function Sidebar() {
 }
 
 export { Sidebar };
+export type { Collections };
