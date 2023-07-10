@@ -30,6 +30,7 @@ function AuthorizationModal({ closeModal }: AuthorizationModalProps) {
       window.localStorage.setItem('AUTH_TOKEN', AUTH_TOKEN);
     }
     closeModal();
+    window.location.reload();
     return setAuthError('');
   }
   return (
