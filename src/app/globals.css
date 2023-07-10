@@ -24,6 +24,11 @@
   @apply bg-[#5364aa];
 }
 
+li li:before {
+  counter-increment: item;
+  content: '-';
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
