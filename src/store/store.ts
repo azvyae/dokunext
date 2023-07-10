@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { Environment, EnvironmentState, SidebarState } from './types';
+import { EnvironmentState, SidebarState, TocState } from './types';
 
 const useEnvironmentStore = create<EnvironmentState>()(
   devtools((set) => ({
     active: 'none',
     environments: [],
-    setActive(value: string) {
+    setActive(value) {
       set(() => ({ active: value }));
     },
-    setEnvironments(environments: Environment[]) {
-      set(() => ({ environments: environments }));
+    setEnvironments(environments) {
+      set(() => ({ environments }));
     }
   }))
 );
@@ -22,4 +22,11 @@ const useSidebarStore = create<SidebarState>((set) => ({
   }
 }));
 
-export { useEnvironmentStore, useSidebarStore };
+const useTocStore = create<TocState>((set) => ({
+  toc: [],
+  setToc(toc) {
+    set(() => ({ toc }));
+  }
+}));
+
+export { useEnvironmentStore, useSidebarStore, useTocStore };

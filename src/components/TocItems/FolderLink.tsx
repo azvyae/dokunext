@@ -24,7 +24,11 @@ function FolderLink({ name, url, children }: FolderLink) {
         </Link>
       </div>
       {children ? (
-        <div className={`ml-4 ${opened ? 'block' : 'hidden'}`}>{children}</div>
+        <div
+          className={`ml-4 ${opened ? 'block' : 'hidden'} flex flex-col gap-2`}
+        >
+          {children}
+        </div>
       ) : null}
     </>
   );

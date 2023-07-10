@@ -5,6 +5,7 @@ import { BiLock as LockIcon } from 'react-icons/bi';
 import { AuthorizationModal } from './Partials/AuthorizationModal';
 import { useSidebarStore } from '@/store/store';
 import Link from 'next/link';
+import { FolderLink } from '../TocItems/FolderLink';
 interface Collections {
   name: string;
   url: string;
@@ -33,8 +34,11 @@ function Sidebar() {
     <li className="text-sm">No Collection or Definition Available</li>
   ) : (
     collections.map((item) => (
-      <li key={item.url} className="my-3 text-sm">
-        <Link href={item.url} className=" hover:underline hover:text-sky-200">
+      <li key={item.url}>
+        <Link
+          href={item.url}
+          className="block p-1 mb-1 text-xs rounded hover:bg-slate-500 bg-slate-600"
+        >
           {item.name}
         </Link>
       </li>
@@ -108,8 +112,31 @@ function Sidebar() {
               {/* <option value="OpenAPI">OpenAPI</option> */}
             </select>
             <p className="mb-2 text-slate-50">Collections:</p>
-            <div className="h-[50vh] overflow-y-auto border border-slate-500 rounded-md p-2">
-              <ul className="list-disc text-slate-50">{collectionNodes}</ul>
+            <div className="h-[10vh] overflow-y-auto border border-slate-500 rounded-md p-2 mb-2">
+              <ul className="text-slate-50">{collectionNodes}</ul>
+            </div>
+            <p className="mb-2 text-slate-50">Table of Contents:</p>
+            <div className="h-[35vh] overflow-y-auto border border-slate-500 rounded-md p-2 ">
+              <div className=" text-slate-50">
+                <p className="mb-2 font-bold">JUMP TO</p>
+                <div className="flex flex-col gap-2">
+                  <Link className="line-clamp-1 hover:underline" href="#">
+                    <span>Sample Link</span>
+                  </Link>
+                  <FolderLink name="Another Abc" url="#abc">
+                    <FolderLink name="Test" url="#abc" />
+                    <div className="flex items-center gap-1">
+                      <span className="text-[0.65rem]">POST</span>
+                      <Link
+                        className="flex items-center gap-1 line-clamp-1 hover:underline"
+                        href="#"
+                      >
+                        <span>Sample Link</span>
+                      </Link>
+                    </div>
+                  </FolderLink>
+                </div>
+              </div>
             </div>
           </div>
           <button
