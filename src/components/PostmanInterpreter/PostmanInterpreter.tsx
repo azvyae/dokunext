@@ -17,10 +17,10 @@ function PostmanInterpreter({ items }: PostmanInterpreterProps) {
     return items.map((item, index) => {
       if (item.item) {
         return (
-          <FolderParser
-            key={item.name}
-            {...{ item, index, renderItems, level }}
-          />
+          <div key={item.name}>
+            <FolderParser {...{ item, index, renderItems, level }} />
+            {level === 0 && <hr className="border-slate-400/40" />}
+          </div>
         );
       } else if (item.request && item.response) {
         const id = `${level}_${index}_${encodeURIComponent(

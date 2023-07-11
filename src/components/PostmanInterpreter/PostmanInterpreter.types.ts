@@ -1,10 +1,10 @@
 interface RequestBody {
   method: string;
-  header: Header[];
+  header: TableItem[];
   url: Url;
   body?: any;
   description?: string;
-  auth?: any;
+  auth?: TableItem[];
 }
 
 interface ResponseBody {
@@ -12,17 +12,9 @@ interface ResponseBody {
   originalRequest: RequestBody;
   status: string;
   code: number;
-  _postman_previewlanguage?: string | null;
-  header?: Header[] | null;
+  header?: TableItem[];
   cookie: any[];
   body: string;
-}
-
-interface Header {
-  key: string;
-  value: string;
-  name?: string;
-  description?: string | { content: string; type: string };
 }
 
 interface Url {
@@ -30,12 +22,14 @@ interface Url {
   protocol?: string;
   host?: string[];
   path?: string[];
-  query?: QueryParameter[];
+  query?: TableItem[];
+  variable?: TableItem[];
 }
 
-interface QueryParameter {
+interface TableItem {
   key: string;
-  value: string;
+  value?: string;
+  description?: string;
 }
 
 interface Item {
@@ -45,7 +39,7 @@ interface Item {
   request?: RequestBody;
   response?: ResponseBody[];
   description?: string;
-  auth?: any;
+  auth?: TableItem[];
 }
 
-export type { Header, Item, QueryParameter, RequestBody, ResponseBody, Url };
+export type { Item, RequestBody, ResponseBody, Url };

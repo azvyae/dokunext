@@ -3,7 +3,7 @@ import { getMethodColor } from '@/components/TocItems/RequestLink';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 import { useState } from 'react';
 import { RequestBody, ResponseBody } from '../PostmanInterpreter.types';
-import { AuthorizationParser } from './AuthorizationParser';
+import { TableItemParser } from './TableItemParser';
 import { BodyRequestParser } from './BodyRequestParser';
 
 interface PostmanItemParserProps {
@@ -66,15 +66,28 @@ function PostmanItemParser({
       <DokuNextMarkdown>{requestUrl}</DokuNextMarkdown>
       <DokuNextMarkdown>{request.description ?? ''}</DokuNextMarkdown>
       {request.auth && (
-        <AuthorizationParser
-          auth={request.auth}
+        <TableItemParser
+          title="🔓 Authorization"
+          item={request.auth}
           message="This authorization header only used for this request."
         />
       )}
+      {request.header && (
+        <TableItemParser title="✍🏼 Request Header" item={request.header} />
+      )}
 
+      {request.url?.variable && (
+        <TableItemParser
+          title="❓ Path Variables"
+          item={request.url.variable}
+        />
+      )}
+
+      {request.url?.query && (
+        <TableItemParser title="🔍 Query Parameters" item={request.url.query} />
+      )}
       {request.body && <BodyRequestParser body={request.body} />}
 
-      <pre>{JSON.stringify(request, null, 2)}</pre>
       {/* {response && (
         <div>
           <h4>Responses:</h4>

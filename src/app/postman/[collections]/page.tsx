@@ -2,7 +2,7 @@
 
 import { PostmanInterpreter } from '@/components';
 import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
-import { AuthorizationParser } from '@/components/PostmanInterpreter/Partials/AuthorizationParser';
+import { TableItemParser } from '@/components/PostmanInterpreter/Partials/TableItemParser';
 import { useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
@@ -43,6 +43,7 @@ async function getCollection(token: string | null, collection: string) {
 
 function CollectionViewer() {
   const setToc = useTocStore((state) => state.setToc);
+  const [loading, setLoading] = useState(true);
   const closeSidebar = useSidebarStore((state) => state.setSidebarState);
 
   const [collectionDisplay, setCollectionDisplay] = useState<{
@@ -128,6 +129,7 @@ function CollectionViewer() {
   );
 
   useEffect(() => {
+    setLoading(true);
     setToc([]);
     closeSidebar(false);
     const collectionId = window.location.pathname.replace('/postman/', '');
@@ -139,27 +141,38 @@ function CollectionViewer() {
       }
       const collectionResponse = await res.json();
       updateColletionDisplay(collectionResponse.data);
+      setLoading(false);
     }
     retrieveData();
   }, [updateColletionDisplay, setToc, closeSidebar]);
   return (
-    <div className="prose prose-h3:text-xl prose-h4:text-lg marker:text-orange-500 prose-h1:text-3xl prose-h2:text-2xl">
-      <h1 className="text-3xl font-bold ">{collectionDisplay?.info.name}</h1>
-      <hr className="my-6 border-slate-400" />
-      <DokuNextMarkdown>{collectionDisplay?.info.description}</DokuNextMarkdown>
-      {collectionDisplay?.auth && (
-        <AuthorizationParser
-          auth={collectionDisplay.auth}
-          message="This authorization header will used for this collection unless its
+    <>
+      {loading && <p className="text-3xl">Loading...</p>}
+      {!loading && (
+        <div className="prose prose-h3:text-xl prose-h4:text-lg marker:text-orange-500 prose-h1:text-3xl prose-h2:text-2xl">
+          <h1 className="text-3xl font-bold ">
+            {collectionDisplay?.info.name}
+          </h1>
+          <hr className="my-6 border-slate-400" />
+          <DokuNextMarkdown>
+            {collectionDisplay?.info.description}
+          </DokuNextMarkdown>
+          {collectionDisplay?.auth && (
+            <TableItemParser
+              item={collectionDisplay.auth}
+              title="🔓 Authorization"
+              message="This authorization header will used for this collection unless its
             overidden."
-        />
-      )}
-      <hr className="my-6 border-slate-400/40" />
+            />
+          )}
+          <hr className="my-6 border-slate-400/40" />
 
-      <div>
-        <PostmanInterpreter items={collectionDisplay?.item ?? []} />
-      </div>
-    </div>
+          <div>
+            <PostmanInterpreter items={collectionDisplay?.item ?? []} />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
