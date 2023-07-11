@@ -4,13 +4,21 @@ import { useEnvironmentStore, useSidebarStore } from '@/store/store';
 import Link from 'next/link';
 import { ChangeEvent } from 'react';
 import { FiSidebar as SidebarIcon } from 'react-icons/fi';
+import { shallow } from 'zustand/shallow';
 function Navbar() {
-  const environment = useEnvironmentStore();
+  const { activeEnv, environments, setActiveEnv } = useEnvironmentStore(
+    (state) => ({
+      activeEnv: state.active,
+      environments: state.environments,
+      setActiveEnv: state.setActive
+    }),
+    shallow
+  );
   function handleEnvChange(e: ChangeEvent<HTMLSelectElement>) {
     const currentValue = e.currentTarget.value;
-    environment.setActive(currentValue);
+    setActiveEnv(currentValue);
   }
-  const envOptions = environment.environments.map((item) => (
+  const envOptions = environments.map((item) => (
     <option key={item.value} value={item.value}>
       {item.name}
     </option>
@@ -41,7 +49,7 @@ function Navbar() {
           name="environment"
           id="environment-selector"
           className="px-2 py-2 pr-4 rounded-md md:px-4 text-slate-900"
-          value={environment.active}
+          value={activeEnv}
           onChange={handleEnvChange}
         >
           <option value="none">No Environment</option>
