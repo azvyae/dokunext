@@ -1,11 +1,12 @@
 import React from 'react';
+import { FiCopy } from 'react-icons/fi';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
-import remarkGfm from 'remark-gfm';
 import { dracula as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { FiCopy } from 'react-icons/fi';
+import remarkGfm from 'remark-gfm';
 interface MarkdownProps {
   children: string;
+  className?: string;
 }
 
 function copyToClipboard(text: string) {
@@ -25,9 +26,10 @@ function HeadingRenderer(props: any) {
   return React.createElement('h' + props.level, { id: slug }, props.children);
 }
 
-function DokuNextMarkdown({ children }: MarkdownProps) {
+function DokuNextMarkdown({ children, className }: MarkdownProps) {
   return (
     <ReactMarkdown
+      className={className}
       remarkPlugins={[remarkGfm]}
       components={{
         h1: HeadingRenderer,
