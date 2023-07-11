@@ -2,10 +2,11 @@
 
 import { PostmanInterpreter } from '@/components';
 import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
+import { AuthorizationParser } from '@/components/PostmanInterpreter/Partials/AuthorizationParser';
 import { useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface EssentialPostmanAPIResponse {
   info: string;
@@ -147,35 +148,11 @@ function CollectionViewer() {
       <hr className="my-6 border-slate-400" />
       <DokuNextMarkdown>{collectionDisplay?.info.description}</DokuNextMarkdown>
       {collectionDisplay?.auth && (
-        <>
-          <h4>
-            🔓 Authorization{' '}
-            <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
-              {collectionDisplay.auth.type}
-            </span>
-          </h4>
-          <p>
-            This authorization header will used for this collection unless its
-            overidden.
-          </p>
-          <table className="table text-sm border border-slate-700">
-            {(
-              collectionDisplay.auth[collectionDisplay.auth.type] as {
-                key: string;
-                value: string;
-              }[]
-            ).map((authItem, index) => (
-              <tr key={index}>
-                <td className="p-2 font-semibold border border-slate-700">
-                  {authItem.key}
-                </td>
-                <td className="p-2 border border-slate-700">
-                  {authItem.value}
-                </td>
-              </tr>
-            ))}
-          </table>
-        </>
+        <AuthorizationParser
+          auth={collectionDisplay.auth}
+          message="This authorization header will used for this collection unless its
+            overidden."
+        />
       )}
       <hr className="my-6 border-slate-400/40" />
 
