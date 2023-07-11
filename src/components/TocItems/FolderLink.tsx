@@ -16,15 +16,18 @@ function FolderLink({ name, url, children, closeSidebar }: FolderLinkProps) {
   return (
     <>
       <div className="flex gap-2">
-        <button onClick={() => setOpened((cur) => !cur)}>
+        <button
+          className="flex items-center flex-shrink-0 gap-2"
+          onClick={() => setOpened((cur) => !cur)}
+        >
           {opened ? <FaChevronDown size={12} /> : <FaChevronRight size={12} />}
+          <BiFolder className="flex-shrink-0 " />
         </button>
         <Link
           href={url}
           className="flex items-center gap-2 hover:underline"
           onClick={closeSidebar}
         >
-          <BiFolder className="flex-shrink-0" />
           <span className="line-clamp-1">{name}</span>
         </Link>
       </div>

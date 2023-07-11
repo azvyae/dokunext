@@ -29,8 +29,8 @@ function getMethodColor(method: HTTP_METHOD, invert = false) {
 
 function RequestLink({ name, url, method, closeSidebar }: RequestLinkProps) {
   return (
-    <div className="flex items-center gap-1">
-      <span className={`text-[0.65rem] ${getMethodColor(method)}`}>
+    <div className="flex gap-1 ml-1">
+      <span className={`text-[0.65rem] mt-[0.08rem] ${getMethodColor(method)}`}>
         {method}
       </span>
       <Link
@@ -39,7 +39,7 @@ function RequestLink({ name, url, method, closeSidebar }: RequestLinkProps) {
         href={url}
         onClick={closeSidebar}
       >
-        <span className="line-clamp-1 "> {name}</span>
+        <span className=""> {name}</span>
       </Link>
     </div>
   );
