@@ -22,19 +22,6 @@ interface PostmanItemsApi {
   };
 }
 
-function flatten(text: any, child: any): any {
-  return typeof child === 'string'
-    ? text + child
-    : React.Children.toArray(child.props.children).reduce(flatten, text);
-}
-
-function HeadingRenderer(props: any) {
-  var children = React.Children.toArray(props.children);
-  var text = children.reduce(flatten, '');
-  var slug = text.toLowerCase().replace(/\W/g, '-');
-  return React.createElement('h' + props.level, { id: slug }, props.children);
-}
-
 async function getCollection(token: string | null, collection: string) {
   const res = await fetch(
     `/postman/api?` +

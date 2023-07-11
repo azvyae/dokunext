@@ -12,11 +12,25 @@ function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text);
 }
 
+function flatten(text: any, child: any): any {
+  return typeof child === 'string'
+    ? text + child
+    : React.Children.toArray(child.props.children).reduce(flatten, text);
+}
+
+function HeadingRenderer(props: any) {
+  var children = React.Children.toArray(props.children);
+  var text = children.reduce(flatten, '');
+  var slug = text.toLowerCase().replace(/\W/g, '-');
+  return React.createElement('h' + props.level, { id: slug }, props.children);
+}
+
 function DokuNextMarkdown({ children }: MarkdownProps) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
+        h1: HeadingRenderer,
         hr: ({ node, ...props }) => (
           <hr className="my-6 border-slate-400/40" {...props} />
         ),
