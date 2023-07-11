@@ -11,7 +11,7 @@ interface RequestLinkProps {
 function getMethodColor(method: HTTP_METHOD, invert = false) {
   switch (method) {
     case 'GET':
-      return invert ? 'bg-emerald-400 text-slate-700' : 'text-emerald-400';
+      return invert ? 'bg-emerald-500 text-slate-50' : 'text-emerald-400';
     case 'HEAD':
       return invert ? 'bg-green-500 text-slate-700' : 'text-green-500';
     case 'POST':
@@ -19,11 +19,11 @@ function getMethodColor(method: HTTP_METHOD, invert = false) {
     case 'PUT':
       return invert ? 'bg-sky-400 text-slate-700' : 'text-sky-400';
     case 'DELETE':
-      return invert ? 'bg-rose-500 text-slate-700' : 'text-rose-500';
+      return invert ? 'bg-rose-500 text-slate-50' : 'text-rose-500';
     case 'OPTIONS':
       return invert ? 'bg-[#f965ca] text-slate-700' : 'text-[#f965ca]';
     case 'PATCH':
-      return invert ? 'bg-purple-400 text-slate-700' : 'text-purple-400';
+      return invert ? 'bg-purple-400 text-slate-50' : 'text-purple-400';
   }
 }
 
