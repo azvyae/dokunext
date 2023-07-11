@@ -147,8 +147,8 @@ function Sidebar() {
       <Modal ref={insertTokenModal}>
         <AuthorizationModal closeModal={closeAuthModal} />
       </Modal>
-      <div
-        className={`fixed w-full h-full md:static md:block ${
+      <aside
+        className={`fixed w-full h-full md:static md:block z-30 md:col-span-2 lg:col-span-1 ${
           sidebarOpen ? 'block' : 'hidden'
         }`}
       >
@@ -184,7 +184,7 @@ function Sidebar() {
             <p>Authorize</p>
           </button>
         </div>
-      </div>
+      </aside>
     </>
   );
 }
