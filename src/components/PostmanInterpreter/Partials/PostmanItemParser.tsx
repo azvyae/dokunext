@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { RequestBody, ResponseBody } from '../PostmanInterpreter.types';
 import { TableItemParser } from './TableItemParser';
 import { BodyRequestParser } from './BodyRequestParser';
+import { isArrayEmpty } from '@/helpers/functions';
 
 interface PostmanItemParserProps {
   id: string;
@@ -65,25 +66,25 @@ function PostmanItemParser({
       </h3>
       <DokuNextMarkdown>{requestUrl}</DokuNextMarkdown>
       <DokuNextMarkdown>{request.description ?? ''}</DokuNextMarkdown>
-      {request.auth && (
+      {!isArrayEmpty(request.auth) && (
         <TableItemParser
           title="🔓 Authorization"
           item={request.auth}
           message="This authorization header only used for this request."
         />
       )}
-      {request.header && (
+      {!isArrayEmpty(request.header) && (
         <TableItemParser title="✍🏼 Request Header" item={request.header} />
       )}
 
-      {request.url?.variable && (
+      {!isArrayEmpty(request.url?.variable) && (
         <TableItemParser
           title="❓ Path Variables"
           item={request.url.variable}
         />
       )}
 
-      {request.url?.query && (
+      {!isArrayEmpty(request.url?.query) && (
         <TableItemParser title="🔍 Query Parameters" item={request.url.query} />
       )}
       {request.body && <BodyRequestParser body={request.body} />}

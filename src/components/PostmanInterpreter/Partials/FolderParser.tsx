@@ -1,6 +1,7 @@
 import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { Item } from '../PostmanInterpreter.types';
 import { TableItemParser } from './TableItemParser';
+import { isArrayEmpty } from '@/helpers/functions';
 
 interface FolderParserProps {
   index: number;
@@ -21,7 +22,7 @@ function FolderParser({ item, index, level, renderItems }: FolderParserProps) {
           📁 {item.name}
         </h3>
         <DokuNextMarkdown>{item.description ?? ''}</DokuNextMarkdown>
-        {item.auth && (
+        {!isArrayEmpty(item.auth) && (
           <TableItemParser
             title="🔓 Authorization"
             item={item.auth}

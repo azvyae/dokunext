@@ -3,6 +3,8 @@
 import { PostmanInterpreter } from '@/components';
 import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { TableItemParser } from '@/components/PostmanInterpreter/Partials/TableItemParser';
+import { TableItem } from '@/components/PostmanInterpreter/PostmanInterpreter.types';
+import { isArrayEmpty } from '@/helpers/functions';
 import { useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
@@ -49,7 +51,7 @@ function CollectionViewer() {
   const [collectionDisplay, setCollectionDisplay] = useState<{
     info: any;
     item: any;
-    auth?: any;
+    auth?: TableItem[];
   }>();
 
   const updateCollectionToc = useCallback(
@@ -157,9 +159,9 @@ function CollectionViewer() {
           <DokuNextMarkdown>
             {collectionDisplay?.info.description}
           </DokuNextMarkdown>
-          {collectionDisplay?.auth && (
+          {!isArrayEmpty(collectionDisplay?.auth) && (
             <TableItemParser
-              item={collectionDisplay.auth}
+              item={collectionDisplay?.auth}
               title="🔓 Authorization"
               message="This authorization header will used for this collection unless its
             overidden."

@@ -42,4 +42,4 @@ interface Item {
   auth?: TableItem[];
 }
 
-export type { Item, RequestBody, ResponseBody, Url };
+export type { Item, RequestBody, ResponseBody, Url, TableItem };
