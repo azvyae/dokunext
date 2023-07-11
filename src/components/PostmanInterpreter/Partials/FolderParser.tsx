@@ -1,4 +1,4 @@
-import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
+import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { Item } from '../PostmanInterpreter.types';
 import { TableItemParser } from './TableItemParser';
 

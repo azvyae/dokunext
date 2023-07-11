@@ -1,4 +1,4 @@
-import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
+import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { BiCodeAlt } from 'react-icons/bi';
 
 interface BodyProps {

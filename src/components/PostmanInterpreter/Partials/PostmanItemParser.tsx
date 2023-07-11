@@ -1,4 +1,4 @@
-import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
+import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { getMethodColor } from '@/components/TocItems/RequestLink';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 import { useState } from 'react';

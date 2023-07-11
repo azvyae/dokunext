@@ -2,7 +2,10 @@ import React from 'react';
 import { FiCopy } from 'react-icons/fi';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+  dracula as style,
+  gruvboxDark as url
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import remarkGfm from 'remark-gfm';
 interface MarkdownProps {
   children: string;
@@ -49,22 +52,28 @@ function DokuNextMarkdown({ children, className }: MarkdownProps) {
           const match = /language-(\w+)/.exec(className || '');
           return !inline && match ? (
             <div className="relative">
-              <code className="absolute px-1 rounded-br-lg bg-slate-500 text-slate-200">
+              <code className="absolute px-1 text-xs rounded-br-md bg-slate-700 text-slate-200">
                 {match[1]}
               </code>
               <button
-                className="absolute top-2 right-2"
+                className="absolute top-0 right-0 p-1 rounded-bl-md bg-slate-700"
                 title="Copy to clipboard"
                 onClick={() => {
                   copyToClipboard(String(children).replace(/\n$/, ''));
                 }}
               >
-                <FiCopy className="text-slate-50" size={18} />
+                <FiCopy className=" text-slate-50" size={12} />
               </button>
               <SyntaxHighlighter
                 {...props}
-                customStyle={{ paddingTop: 40, marginBottom: 24 }}
-                style={style}
+                customStyle={{
+                  paddingTop: match[1] === 'url' ? 10 : 24,
+                  paddingLeft: match[1] === 'url' ? 40 : 12,
+                  paddingBottom: match[1] === 'url' ? 8 : 12,
+                  paddingRight: match[1] === 'url' ? 36 : 12,
+                  marginBottom: 4
+                }}
+                style={match[1] === 'url' ? url : style}
                 language={match[1]}
                 PreTag="div"
               >

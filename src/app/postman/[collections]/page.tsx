@@ -1,7 +1,7 @@
 'use client';
 
 import { PostmanInterpreter } from '@/components';
-import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
+import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { TableItemParser } from '@/components/PostmanInterpreter/Partials/TableItemParser';
 import { useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
