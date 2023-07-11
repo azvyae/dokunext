@@ -63,7 +63,7 @@ function DokuNextMarkdown({ children, className }: MarkdownProps) {
               </button>
               <SyntaxHighlighter
                 {...props}
-                customStyle={{ paddingTop: 40 }}
+                customStyle={{ paddingTop: 40, marginBottom: 24 }}
                 style={style}
                 language={match[1]}
                 PreTag="div"
