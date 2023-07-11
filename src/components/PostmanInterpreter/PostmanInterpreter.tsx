@@ -1,12 +1,16 @@
 'use client';
+import { HTTP_METHOD } from 'next/dist/server/web/http';
 import React, { useState } from 'react';
+import { DokuNextMarkdown } from '../Markdown/Markdown';
+import { getMethodColor } from '../TocItems/RequestLink';
 
 interface Request {
   method: string;
   header: Header[];
-  body?: Body;
   url: Url;
+  body?: any;
   description?: string;
+  auth?: any;
 }
 
 interface Response {
@@ -14,51 +18,40 @@ interface Response {
   originalRequest: Request;
   status: string;
   code: number;
-  header: Header[];
+  _postman_previewlanguage?: string | null;
+  header?: Header[] | null;
   cookie: any[];
   body: string;
-}
-
-interface Item {
-  name: string;
-  item?: Item[];
-  request?: Request;
-  response?: Response[];
-  description?: string;
 }
 
 interface Header {
   key: string;
   value: string;
-  type: string;
-  description?: string;
-}
-
-interface Body {
-  mode: string;
-  raw: string;
-  options?: any;
+  name?: string;
+  description?: string | { content: string; type: string };
 }
 
 interface Url {
   raw: string;
+  protocol?: string;
   host?: string[];
   path?: string[];
-  protocol?: string;
-  variable?: Variable[];
   query?: QueryParameter[];
-}
-
-interface Variable {
-  key: string;
-  value: string | null;
-  description?: string;
 }
 
 interface QueryParameter {
   key: string;
   value: string;
+}
+
+interface Item {
+  name: string;
+  item?: Item[];
+  event?: Event[];
+  request?: Request;
+  response?: Response[];
   description?: string;
+  auth?: any;
 }
 
 interface Example {
@@ -66,7 +59,11 @@ interface Example {
   request: Request;
 }
 
-const PostmanInterpreter: React.FC<{ items: Item[] }> = ({ items }) => {
+interface PostmanInterpreterProps {
+  items: Item[];
+}
+
+function PostmanInterpreter({ items }: PostmanInterpreterProps) {
   const [selectedResponse, setSelectedResponse] = useState<
     Response | undefined
   >(undefined);
@@ -82,13 +79,136 @@ const PostmanInterpreter: React.FC<{ items: Item[] }> = ({ items }) => {
     );
   };
 
-  const renderItems = (items: Item[]) => {
+  function renderItems(items: Item[], level: number = 0) {
     return items.map((item, index) => {
-      if (item.request) {
+      if (item.item) {
         return (
           <div key={item.name}>
-            <h3 id={`item-${index}`}>{item.name}</h3>
-            <p>{item.description}</p>
+            <h3
+              id={`${level}_${index}_${encodeURIComponent(
+                item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
+              )}`}
+            >
+              📁 {item.name}
+            </h3>
+            <DokuNextMarkdown>{item.description ?? ''}</DokuNextMarkdown>
+            {item.auth && (
+              <>
+                <h4>
+                  🔓 Authorization{' '}
+                  <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
+                    {item.auth.type}
+                  </span>
+                </h4>
+                <p>
+                  This authorization header will be used for this folder unless
+                  its overidden.
+                </p>
+                <table className="table text-sm border border-slate-700">
+                  {(
+                    item.auth[item.auth.type] as {
+                      key: string;
+                      value: string;
+                    }[]
+                  ).map((authItem, index) => (
+                    <tr key={index}>
+                      <td className="p-2 font-semibold border border-slate-700">
+                        {authItem.key}
+                      </td>
+                      <td className="p-2 border border-slate-700">
+                        {authItem.value}
+                      </td>
+                    </tr>
+                  ))}
+                </table>
+              </>
+            )}
+            {item.item && renderItems(item.item, level + 1)}
+          </div>
+        );
+      } else if (item.request && item.response) {
+        const url = `\`\`\`url\n${
+          item.request?.url?.raw ?? '[empty value]'
+        }\n\`\`\``;
+        return (
+          <div key={item.name}>
+            <h3
+              id={`${level}_${index}_${encodeURIComponent(
+                item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
+              )}`}
+            >
+              <span
+                className={`${getMethodColor(
+                  item.request?.method as HTTP_METHOD,
+                  true
+                )} mr-2 rounded p-1 text-base`}
+              >
+                {item.request?.method}
+              </span>{' '}
+              {item.name}
+            </h3>
+            <DokuNextMarkdown>{url}</DokuNextMarkdown>
+            <DokuNextMarkdown>
+              {item.request.description ?? ''}
+            </DokuNextMarkdown>
+            {item.request.auth && (
+              <>
+                <h4>
+                  🔓 Authorization{' '}
+                  <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
+                    {item.request.auth.type}
+                  </span>
+                </h4>
+                <p>This authorization header only used for this request.</p>
+                <table className="table text-sm border border-slate-700">
+                  {(
+                    item.request.auth[item.request.auth.type] as {
+                      key: string;
+                      value: string;
+                    }[]
+                  ).map((authItem, index) => (
+                    <tr key={index}>
+                      <td className="p-2 font-semibold border border-slate-700">
+                        {authItem.key}
+                      </td>
+                      <td className="p-2 border border-slate-700">
+                        {authItem.value}
+                      </td>
+                    </tr>
+                  ))}
+                </table>
+              </>
+            )}
+            {item.request.body && typeof item.request.body === 'string' ? (
+              <DokuNextMarkdown>{item.request.body}</DokuNextMarkdown>
+            ) : (
+              <>
+                {/* <h4>
+                  🔓 Authorization{' '}
+                  <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
+                    {item.request.auth.type}
+                  </span>
+                </h4>
+                <p>This authorization header only used for this request.</p>
+                <table className="table text-sm border border-slate-700">
+                  {(
+                    item.request.auth[item.request.auth.type] as {
+                      key: string;
+                      value: string;
+                    }[]
+                  ).map((authItem, index) => (
+                    <tr key={index}>
+                      <td className="p-2 font-semibold border border-slate-700">
+                        {authItem.key}
+                      </td>
+                      <td className="p-2 border border-slate-700">
+                        {authItem.value}
+                      </td>
+                    </tr>
+                  ))}
+                </table> */}
+              </>
+            )}
             <pre>{JSON.stringify(item.request, null, 2)}</pre>
             {item.response && (
               <div>
@@ -105,17 +225,9 @@ const PostmanInterpreter: React.FC<{ items: Item[] }> = ({ items }) => {
             )}
           </div>
         );
-      } else {
-        return (
-          <div key={item.name}>
-            <h3 id={`item-${index}`}>{item.name}</h3>
-            <p>{item.description}</p>
-            {item.item && renderItems(item.item)}
-          </div>
-        );
       }
     });
-  };
+  }
 
   const renderResponseDropdown = (responses: Response[]) => {
     return (
@@ -130,25 +242,11 @@ const PostmanInterpreter: React.FC<{ items: Item[] }> = ({ items }) => {
     );
   };
 
-  const renderTableOfContents = (items: Item[]) => {
-    return (
-      <ul>
-        {items.map((item, index) => (
-          <li key={item.name}>
-            <a href={`#item-${index}`}>{item.name}</a>
-            {item.item && renderTableOfContents(item.item)}
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
   return (
     <div>
-      <div>{renderTableOfContents(items)}</div>
       <div>{renderItems(items)}</div>
     </div>
   );
-};
+}
 
 export { PostmanInterpreter };

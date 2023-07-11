@@ -5,6 +5,7 @@ import { Collections } from '@/components/Sidebar/Sidebar';
 interface EssentialPostmanJsonAPI {
   info: any;
   item: any[];
+  auth?: any;
   variable: any[];
 }
 
@@ -30,6 +31,7 @@ async function GET(request: NextRequest) {
     data: {
       info: JSON.stringify(contents.info),
       item: JSON.stringify(contents.item),
+      auth: JSON.stringify(contents.auth),
       variable: contents.variable
     }
   });
