@@ -29,7 +29,7 @@ li li:before {
   content: '-';
 }
 * {
-  @apply scroll-m-20 !scroll-smooth;
+  @apply scroll-m-24 !scroll-smooth;
 }
 
 body {
