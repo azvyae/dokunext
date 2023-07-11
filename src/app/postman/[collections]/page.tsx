@@ -1,18 +1,16 @@
 'use client';
 
 import { PostmanInterpreter } from '@/components';
+import { DokuNextMarkdown } from '@/components/Markdown/Markdown';
 import { useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import remarkGfm from 'remark-gfm';
 
 interface EssentialPostmanAPIResponse {
   info: string;
   item: string;
+  auth?: any;
   variable: any[];
 }
 
@@ -62,6 +60,7 @@ function CollectionViewer() {
   const [collectionDisplay, setCollectionDisplay] = useState<{
     info: any;
     item: any;
+    auth?: any;
   }>();
 
   const updateCollectionToc = useCallback(
@@ -113,6 +112,7 @@ function CollectionViewer() {
       }
       let info = collection.info;
       let item = collection.item;
+      let auth = collection.auth;
 
       collection.variable.forEach((variable) => {
         info = JSON.parse(
@@ -121,11 +121,17 @@ function CollectionViewer() {
         item = JSON.parse(
           item.replaceAll(`{{${variable.key}}}`, variable.value)
         );
+        if (auth) {
+          auth = JSON.parse(
+            auth.replaceAll(`{{${variable.key}}}`, variable.value)
+          );
+        }
       });
 
       setCollectionDisplay({
         info,
-        item
+        item,
+        auth
       });
 
       updateCollectionToc(info, item);
@@ -149,43 +155,47 @@ function CollectionViewer() {
     retrieveData();
   }, [updateColletionDisplay, setToc, closeSidebar]);
   return (
-    <>
+    <div className="prose prose-h3:text-xl prose-h4:text-lg marker:text-orange-500 prose-h1:text-3xl prose-h2:text-2xl">
       <h1 className="text-3xl font-bold ">{collectionDisplay?.info.name}</h1>
       <hr className="my-6 border-slate-400" />
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          h1: HeadingRenderer,
-          h2: HeadingRenderer,
-          h3: HeadingRenderer,
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '');
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                style={style}
-                language={match[1]}
-                PreTag="div"
-              >
-                {String(children).replace(/\n$/, '')}
-              </SyntaxHighlighter>
-            ) : (
-              <code {...props} className={className}>
-                {children}
-              </code>
-            );
-          }
-        }}
-        className="prose prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg"
-      >
-        {collectionDisplay?.info.description}
-      </ReactMarkdown>
-      <hr className="my-6 border-slate-300" />
+      <DokuNextMarkdown>{collectionDisplay?.info.description}</DokuNextMarkdown>
+      {collectionDisplay?.auth && (
+        <>
+          <h4>
+            🔓 Authorization{' '}
+            <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
+              {collectionDisplay.auth.type}
+            </span>
+          </h4>
+          <p>
+            This authorization header will used for this collection unless its
+            overidden.
+          </p>
+          <table className="table text-sm border border-slate-700">
+            {(
+              collectionDisplay.auth[collectionDisplay.auth.type] as {
+                key: string;
+                value: string;
+              }[]
+            ).map((authItem, index) => (
+              <tr key={index}>
+                <td className="p-2 font-semibold border border-slate-700">
+                  {authItem.key}
+                </td>
+                <td className="p-2 border border-slate-700">
+                  {authItem.value}
+                </td>
+              </tr>
+            ))}
+          </table>
+        </>
+      )}
+      <hr className="my-6 border-slate-400/40" />
 
-      <div className="prose prose-h3:text-2xl">
+      <div>
         <PostmanInterpreter items={collectionDisplay?.item ?? []} />
       </div>
-    </>
+    </div>
   );
 }
 
