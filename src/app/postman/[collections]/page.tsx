@@ -1,14 +1,14 @@
 'use client';
 
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import remarkGfm from 'remark-gfm';
-import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { PostmanInterpreter } from '@/components';
+import { useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
-import { useTocStore } from '@/store/store';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import remarkGfm from 'remark-gfm';
 
 interface EssentialPostmanAPIResponse {
   info: string;
@@ -57,6 +57,8 @@ async function getCollection(token: string | null, collection: string) {
 
 function CollectionViewer() {
   const setToc = useTocStore((state) => state.setToc);
+  const closeSidebar = useSidebarStore((state) => state.setSidebarState);
+
   const [collectionDisplay, setCollectionDisplay] = useState<{
     info: any;
     item: any;
@@ -71,7 +73,7 @@ function CollectionViewer() {
             return {
               name: item.name,
               url: `#${level}_${index}_${encodeURIComponent(
-                item.name.replaceAll('/', '_')
+                item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
               )}`,
               items: mapItem(item.item, level + 1)
             };
@@ -80,7 +82,7 @@ function CollectionViewer() {
           return {
             name: item.name,
             url: `#${level}_${index}_${encodeURIComponent(
-              item.name.replaceAll('/', '_')
+              item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
             )}`,
             method: item.request?.method
           };
@@ -133,6 +135,7 @@ function CollectionViewer() {
 
   useEffect(() => {
     setToc([]);
+    closeSidebar(false);
     const collectionId = window.location.pathname.replace('/postman/', '');
     const token = window.localStorage.getItem('AUTH_TOKEN');
     async function retrieveData() {
@@ -144,7 +147,7 @@ function CollectionViewer() {
       updateColletionDisplay(collectionResponse.data);
     }
     retrieveData();
-  }, [updateColletionDisplay, setToc]);
+  }, [updateColletionDisplay, setToc, closeSidebar]);
   return (
     <>
       <h1 className="text-3xl font-bold ">{collectionDisplay?.info.name}</h1>
@@ -177,7 +180,9 @@ function CollectionViewer() {
       >
         {collectionDisplay?.info.description}
       </ReactMarkdown>
-      <div className="prose prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg">
+      <hr className="my-6 border-slate-300" />
+
+      <div className="prose prose-h3:text-2xl">
         <PostmanInterpreter items={collectionDisplay?.item ?? []} />
       </div>
     </>

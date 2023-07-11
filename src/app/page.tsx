@@ -1,13 +1,30 @@
 'use client';
 
-import { useEnvironmentStore } from '@/store/store';
-import { useEffect, useState } from 'react';
+import {
+  useEnvironmentStore,
+  useSidebarStore,
+  useTocStore
+} from '@/store/store';
+import { useEffect } from 'react';
+import { shallow } from 'zustand/shallow';
 
 export default function Home() {
-  const environment = useEnvironmentStore();
+  const closeSidebar = useSidebarStore((state) => state.setSidebarState);
+
+  const { setActiveEnv, setEnviroments } = useEnvironmentStore(
+    (state) => ({
+      setActiveEnv: state.setActive,
+      setEnviroments: state.setEnvironments
+    }),
+    shallow
+  );
+  const setToc = useTocStore((state) => state.setToc);
+
   useEffect(() => {
-    environment.setActive('none');
-    environment.setEnvironments([]);
+    closeSidebar(false);
+    setActiveEnv('none');
+    setEnviroments([]);
+    setToc([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

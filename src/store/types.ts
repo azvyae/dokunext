@@ -15,6 +15,7 @@ interface EnvironmentState {
 interface SidebarState {
   open: boolean;
   toggleSidebar: () => void;
+  setSidebarState: (state: boolean) => void;
 }
 
 interface Toc {
