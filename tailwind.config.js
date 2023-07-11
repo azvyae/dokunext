@@ -12,6 +12,17 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            pre: {
+              color: 'black',
+              background: 'transparent',
+              padding: 0
+            }
+          }
+        }
       }
     }
   },
