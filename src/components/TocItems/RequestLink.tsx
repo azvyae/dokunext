@@ -5,28 +5,29 @@ interface RequestLinkProps {
   name: string;
   url: string;
   method: HTTP_METHOD;
+  closeSidebar: () => void;
 }
 
-function getMethodColor(method: HTTP_METHOD) {
+function getMethodColor(method: HTTP_METHOD, invert = false) {
   switch (method) {
     case 'GET':
-      return 'text-emerald-400';
+      return invert ? 'bg-emerald-400 text-slate-700' : 'text-emerald-400';
     case 'HEAD':
-      return 'text-green-500';
+      return invert ? 'bg-green-500 text-slate-700' : 'text-green-500';
     case 'POST':
-      return 'text-yellow-300';
+      return invert ? 'bg-yellow-300 text-slate-700' : 'text-yellow-300';
     case 'PUT':
-      return 'text-sky-400';
+      return invert ? 'bg-sky-400 text-slate-700' : 'text-sky-400';
     case 'DELETE':
-      return 'text-rose-500';
+      return invert ? 'bg-rose-500 text-slate-700' : 'text-rose-500';
     case 'OPTIONS':
-      return 'text-[#f965ca]';
+      return invert ? 'bg-[#f965ca] text-slate-700' : 'text-[#f965ca]';
     case 'PATCH':
-      return 'text-purple-400';
+      return invert ? 'bg-purple-400 text-slate-700' : 'text-purple-400';
   }
 }
 
-function RequestLink({ name, url, method }: RequestLinkProps) {
+function RequestLink({ name, url, method, closeSidebar }: RequestLinkProps) {
   return (
     <div className="flex items-center gap-1">
       <span className={`text-[0.65rem] ${getMethodColor(method)}`}>
@@ -36,6 +37,7 @@ function RequestLink({ name, url, method }: RequestLinkProps) {
         className="flex items-center gap-1 text-sm hover:underline"
         title={name}
         href={url}
+        onClick={closeSidebar}
       >
         <span className="line-clamp-1 "> {name}</span>
       </Link>
@@ -43,4 +45,4 @@ function RequestLink({ name, url, method }: RequestLinkProps) {
   );
 }
 
-export { RequestLink };
+export { RequestLink, getMethodColor };

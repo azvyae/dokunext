@@ -8,17 +8,22 @@ interface FolderLinkProps {
   name: string;
   url: string;
   children?: ReactNode;
+  closeSidebar: () => void;
 }
 
-function FolderLink({ name, url, children }: FolderLinkProps) {
+function FolderLink({ name, url, children, closeSidebar }: FolderLinkProps) {
   const [opened, setOpened] = useState(false);
   return (
     <>
-      <div className="flex gap-1">
+      <div className="flex gap-2">
         <button onClick={() => setOpened((cur) => !cur)}>
-          {opened ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
+          {opened ? <FaChevronDown size={12} /> : <FaChevronRight size={12} />}
         </button>
-        <Link href={url} className="flex items-center gap-2 hover:underline">
+        <Link
+          href={url}
+          className="flex items-center gap-2 hover:underline"
+          onClick={closeSidebar}
+        >
           <BiFolder className="flex-shrink-0" />
           <span className="line-clamp-1">{name}</span>
         </Link>

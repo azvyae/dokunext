@@ -1,13 +1,14 @@
 'use client';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Modal } from '../Modal/Modal';
-import { BiLock as LockIcon } from 'react-icons/bi';
-import { AuthorizationModal } from './Partials/AuthorizationModal';
 import { useSidebarStore, useTocStore } from '@/store/store';
+import { Toc } from '@/store/types';
 import Link from 'next/link';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { BiLock as LockIcon } from 'react-icons/bi';
+import { shallow } from 'zustand/shallow';
+import { Modal } from '../Modal/Modal';
 import { FolderLink } from '../TocItems/FolderLink';
 import { RequestLink } from '../TocItems/RequestLink';
-import { Toc } from '@/store/types';
+import { AuthorizationModal } from './Partials/AuthorizationModal';
 interface Collections {
   name: string;
   url: string;
@@ -27,43 +28,60 @@ async function getApiDefinitions(token: string | null, provider: Provider) {
   return res;
 }
 
-function parseToc(toc: Toc[]) {
-  return toc.map((item) => {
-    if (item.items) {
-      return (
-        <FolderLink key={item.url} name={item.name} url={item.url}>
-          {parseToc(item.items)}
-        </FolderLink>
-      );
-    }
-    if (item.method) {
-      return (
-        <RequestLink
-          key={item.url}
-          method={item.method}
-          name={item.name}
-          url={item.url}
-        />
-      );
-    }
-    return (
-      <Link
-        key={item.url}
-        className="text-sm line-clamp-1 hover:underline"
-        href={item.url}
-      >
-        <span>{item.name}</span>
-      </Link>
-    );
-  });
-}
-
 function Sidebar() {
   const [provider, setProvider] = useState<Provider>('Postman');
   const [collections, setCollections] = useState<Collections[]>([]);
   const insertTokenModal = useRef<HTMLDialogElement>(null);
-  const sidebarOpen = useSidebarStore((state) => state.open);
+  const { sidebarOpen, setSidebarState } = useSidebarStore(
+    (state) => ({
+      sidebarOpen: state.open,
+      setSidebarState: state.setSidebarState
+    }),
+    shallow
+  );
   const tocState = useTocStore((state) => state.toc);
+  const parseToc = useCallback(
+    function parseToc(toc: Toc[]) {
+      return toc.map((item) => {
+        if (item.items) {
+          return (
+            <FolderLink
+              key={item.url}
+              name={item.name}
+              url={item.url}
+              closeSidebar={() => setSidebarState(false)}
+            >
+              {parseToc(item.items)}
+            </FolderLink>
+          );
+        }
+        if (item.method) {
+          return (
+            <RequestLink
+              key={item.url}
+              method={item.method}
+              name={item.name}
+              url={item.url}
+              closeSidebar={() => setSidebarState(false)}
+            />
+          );
+        }
+        return (
+          <Link
+            key={item.url}
+            className="text-sm line-clamp-1 hover:underline"
+            href={item.url}
+            onClick={() => setSidebarState(false)}
+          >
+            <span>{item.name}</span>
+          </Link>
+        );
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   const toc = parseToc(tocState);
 
   const collectionNodes = !(collections.length > 0) ? (
@@ -151,10 +169,9 @@ function Sidebar() {
             <div className="h-[10vh] overflow-y-auto border border-slate-500 rounded-md p-2 mb-2">
               <ul className="text-slate-50">{collectionNodes}</ul>
             </div>
-            <p className="mb-2 text-slate-50">Table of Contents:</p>
+            <p className="mb-2 text-slate-50">Jump To:</p>
             <div className="h-[35vh] overflow-y-auto border border-slate-500 rounded-md p-2 ">
               <div className=" text-slate-50">
-                <p className="mb-2 font-bold">JUMP TO</p>
                 <div className="flex flex-col gap-2">{toc}</div>
               </div>
             </div>
