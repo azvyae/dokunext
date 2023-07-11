@@ -19,7 +19,8 @@ module.exports = {
             pre: {
               color: 'black',
               background: 'transparent',
-              padding: 0
+              padding: 0,
+              margin: 0
             }
           }
         }
