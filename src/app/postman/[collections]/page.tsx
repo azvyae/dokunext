@@ -6,11 +6,22 @@ import remarkGfm from 'remark-gfm';
 import { PrismAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { PostmanInterpreter } from '@/components';
+import { Toc } from '@/store/types';
+import { HTTP_METHOD } from 'next/dist/server/web/http';
+import { useTocStore } from '@/store/store';
 
 interface EssentialPostmanAPIResponse {
   info: string;
   item: string;
   variable: any[];
+}
+
+interface PostmanItemsApi {
+  name: string;
+  item?: PostmanItemsApi[];
+  request?: {
+    method: HTTP_METHOD;
+  };
 }
 
 function flatten(text: any, child: any): any {
@@ -45,27 +56,53 @@ async function getCollection(token: string | null, collection: string) {
 }
 
 function CollectionViewer() {
-  const [collection, setCollection] = useState<EssentialPostmanAPIResponse>();
+  const setToc = useTocStore((state) => state.setToc);
   const [collectionDisplay, setCollectionDisplay] = useState<{
     info: any;
     item: any;
   }>();
 
-  const updateCollectionToc = useCallback((info: any, item: any) => {
-    const toc: { anchor: string; name: string }[] = [];
-    const regex = /^# .*/gm;
-    toc.push(
-      ...[...info.description.matchAll(regex)].map((item) => {
-        const target = item[0];
-        return {
-          anchor: target.toLowerCase().replace('# ', ''),
-          name: target.replace('#', '')
-        };
-      })
-    );
+  const updateCollectionToc = useCallback(
+    (info: any, items: any) => {
+      function mapItem(items: PostmanItemsApi[], level: number = 0): any {
+        return items.map((item, index) => {
+          // is folder
+          if (item.item) {
+            return {
+              name: item.name,
+              url: `#${level}_${index}_${encodeURIComponent(
+                item.name.replaceAll('/', '_')
+              )}`,
+              items: mapItem(item.item, level + 1)
+            };
+          }
+          // is request
+          return {
+            name: item.name,
+            url: `#${level}_${index}_${encodeURIComponent(
+              item.name.replaceAll('/', '_')
+            )}`,
+            method: item.request?.method
+          };
+        });
+      }
 
-    console.info(toc);
-  }, []);
+      const toc: Toc[] = [];
+      const regex = /^# .*/gm;
+      toc.push(
+        ...[...info.description.matchAll(regex)].map((item) => {
+          const target = item[0];
+          return {
+            name: target.replace('# ', ''),
+            url: target.toLowerCase().replace('# ', '#')
+          };
+        }),
+        ...mapItem(items)
+      );
+      setToc(toc);
+    },
+    [setToc]
+  );
 
   const updateColletionDisplay = useCallback(
     (collection: EssentialPostmanAPIResponse) => {
@@ -95,6 +132,7 @@ function CollectionViewer() {
   );
 
   useEffect(() => {
+    setToc([]);
     const collectionId = window.location.pathname.replace('/postman/', '');
     const token = window.localStorage.getItem('AUTH_TOKEN');
     async function retrieveData() {
@@ -103,11 +141,10 @@ function CollectionViewer() {
         return console.error(`HTTP Error: ${res.status}`);
       }
       const collectionResponse = await res.json();
-      setCollection(collectionResponse.data);
       updateColletionDisplay(collectionResponse.data);
     }
     retrieveData();
-  }, [updateColletionDisplay]);
+  }, [updateColletionDisplay, setToc]);
   return (
     <>
       <h1 className="text-3xl font-bold ">{collectionDisplay?.info.name}</h1>

@@ -28,6 +28,9 @@ li li:before {
   counter-increment: item;
   content: '-';
 }
+* {
+  @apply scroll-m-20 !scroll-smooth;
+}
 
 body {
   color: rgb(var(--foreground-rgb));

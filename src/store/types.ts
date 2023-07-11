@@ -1,3 +1,5 @@
+import { HTTP_METHOD } from 'next/dist/server/web/http';
+
 interface Environment {
   name: string;
   value: string;
@@ -18,6 +20,7 @@ interface SidebarState {
 interface Toc {
   name: string;
   url: string;
+  method?: HTTP_METHOD;
   items?: Toc[];
 }
 
@@ -26,4 +29,4 @@ interface TocState {
   setToc: (toc: Toc[]) => void;
 }
 
-export type { Environment, EnvironmentState, SidebarState, TocState };
+export type { Environment, EnvironmentState, SidebarState, TocState, Toc };

@@ -3,9 +3,11 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Modal } from '../Modal/Modal';
 import { BiLock as LockIcon } from 'react-icons/bi';
 import { AuthorizationModal } from './Partials/AuthorizationModal';
-import { useSidebarStore } from '@/store/store';
+import { useSidebarStore, useTocStore } from '@/store/store';
 import Link from 'next/link';
 import { FolderLink } from '../TocItems/FolderLink';
+import { RequestLink } from '../TocItems/RequestLink';
+import { Toc } from '@/store/types';
 interface Collections {
   name: string;
   url: string;
@@ -25,11 +27,45 @@ async function getApiDefinitions(token: string | null, provider: Provider) {
   return res;
 }
 
+function parseToc(toc: Toc[]) {
+  return toc.map((item) => {
+    if (item.items) {
+      return (
+        <FolderLink key={item.url} name={item.name} url={item.url}>
+          {parseToc(item.items)}
+        </FolderLink>
+      );
+    }
+    if (item.method) {
+      return (
+        <RequestLink
+          key={item.url}
+          method={item.method}
+          name={item.name}
+          url={item.url}
+        />
+      );
+    }
+    return (
+      <Link
+        key={item.url}
+        className="text-sm line-clamp-1 hover:underline"
+        href={item.url}
+      >
+        <span>{item.name}</span>
+      </Link>
+    );
+  });
+}
+
 function Sidebar() {
   const [provider, setProvider] = useState<Provider>('Postman');
   const [collections, setCollections] = useState<Collections[]>([]);
   const insertTokenModal = useRef<HTMLDialogElement>(null);
   const sidebarOpen = useSidebarStore((state) => state.open);
+  const tocState = useTocStore((state) => state.toc);
+  const toc = parseToc(tocState);
+
   const collectionNodes = !(collections.length > 0) ? (
     <li className="text-sm">No Collection or Definition Available</li>
   ) : (
@@ -119,23 +155,7 @@ function Sidebar() {
             <div className="h-[35vh] overflow-y-auto border border-slate-500 rounded-md p-2 ">
               <div className=" text-slate-50">
                 <p className="mb-2 font-bold">JUMP TO</p>
-                <div className="flex flex-col gap-2">
-                  <Link className="line-clamp-1 hover:underline" href="#">
-                    <span>Sample Link</span>
-                  </Link>
-                  <FolderLink name="Another Abc" url="#abc">
-                    <FolderLink name="Test" url="#abc" />
-                    <div className="flex items-center gap-1">
-                      <span className="text-[0.65rem]">POST</span>
-                      <Link
-                        className="flex items-center gap-1 line-clamp-1 hover:underline"
-                        href="#"
-                      >
-                        <span>Sample Link</span>
-                      </Link>
-                    </div>
-                  </FolderLink>
-                </div>
+                <div className="flex flex-col gap-2">{toc}</div>
               </div>
             </div>
           </div>

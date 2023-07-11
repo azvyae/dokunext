@@ -4,13 +4,13 @@ import React, { ReactNode, useState } from 'react';
 import { BiFolder } from 'react-icons/bi';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 
-interface FolderLink {
+interface FolderLinkProps {
   name: string;
   url: string;
   children?: ReactNode;
 }
 
-function FolderLink({ name, url, children }: FolderLink) {
+function FolderLink({ name, url, children }: FolderLinkProps) {
   const [opened, setOpened] = useState(false);
   return (
     <>
