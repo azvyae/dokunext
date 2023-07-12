@@ -35,13 +35,13 @@ function ApiResponseParser({ response }: ApiResponseParser) {
     );
   }
   return (
-    <div>
-      <div className="flex items-center">
+    <div className="w-full">
+      <div className="flex flex-col sm:items-center sm:flex-row">
         <h4 className="flex-grow">🟪 Example</h4>
         {renderApiResponses(response)}
       </div>
       {selectedResponse && (
-        <div className="grid gap-4 p-1 overflow-auto border">
+        <div className="flex flex-col gap-4 p-1 border">
           <div>
             <b className="block">Request</b>
             {selectedResponse.originalRequest?.url?.raw && (
