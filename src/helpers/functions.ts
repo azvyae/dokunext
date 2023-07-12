@@ -38,12 +38,17 @@ function generateCurlCommand(request: ApiRequest): string {
       request.body.urlencoded.forEach((param: any) => {
         curlCommand += `--data-urlencode '${param.key}=${param.value}' `;
       });
+    } else {
+      curlCommand += `--data '${request.body.raw.replace(/'/g, "'\\''")}' `;
     }
   }
 
   // URL
   const url = generateURL(request.url);
-  curlCommand += `'${url}'`;
+  if (url.includes('{{')) {
+    curlCommand += '--globoff ';
+  }
+  curlCommand = curlCommand.replace('--location', `--location '${url}'`);
 
   return '```bash\n' + curlCommand + '\n```';
 }
