@@ -26,7 +26,11 @@ function HeadingRenderer(props: any) {
   var children = React.Children.toArray(props.children);
   var text = children.reduce(flatten, '');
   var slug = text.toLowerCase().replace(/\W/g, '-');
-  return React.createElement('h' + props.level, { id: slug }, props.children);
+  return React.createElement(
+    'h' + props.level,
+    { id: slug, className: 'my-4' },
+    props.children
+  );
 }
 
 function DokuNextMarkdown({ children, className }: MarkdownProps) {
@@ -36,6 +40,7 @@ function DokuNextMarkdown({ children, className }: MarkdownProps) {
       remarkPlugins={[remarkGfm]}
       components={{
         h1: HeadingRenderer,
+        h2: ({ node, ...props }) => <h2 className="my-4" {...props} />,
         hr: ({ node, ...props }) => (
           <hr className="my-6 border-slate-400/40" {...props} />
         ),
