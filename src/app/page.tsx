@@ -23,8 +23,7 @@ export default function Home() {
     closeSidebar(false);
     setActiveEnv('none');
     setToc([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [closeSidebar, setActiveEnv, setToc]);
 
   return (
     <>

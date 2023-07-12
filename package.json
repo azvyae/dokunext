@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
-    "@types/react-syntax-highlighter": "^15.5.7"
+    "@types/react-syntax-highlighter": "^15.5.7",
+    "cntl": "^1.0.0"
   }
 }

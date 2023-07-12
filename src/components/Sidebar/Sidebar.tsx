@@ -50,6 +50,7 @@ function Sidebar() {
     shallow
   );
   const tocState = useTocStore((state) => state.toc);
+  console.info(tocState);
   const parseToc = useCallback(
     function parseToc(toc: Toc[]) {
       return toc.map((item) => {
