@@ -29,13 +29,15 @@ function FolderParser({ item, index, level, renderItems }: FolderParserProps) {
   return (
     <div className="pl-2 border-l">
       <button
-        className={`flex items-center gap-2 ${
+        className={`flex items-center justify-between gap-2 w-full rounded hover:bg-slate-200/70 px-1 ${
           !dropdown[`#${id}`]?.verbose && 'text-neutral-500'
         }`}
         onClick={() => toggleDropdown(`#${id}`)}
       >
         <h3
-          className={`${!dropdown[`#${id}`]?.verbose && 'text-neutral-500'}`}
+          className={`text-left text-base ${
+            !dropdown[`#${id}`]?.verbose && 'text-neutral-500'
+          }`}
           id={id}
         >
           📁 {item.name}

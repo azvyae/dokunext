@@ -30,15 +30,17 @@ function PostmanItemParser({
   return (
     <div key={id}>
       <button
-        className={`flex items-center gap-2 ${!verbose && 'text-neutral-500'}`}
+        className={`flex items-center justify-between w-full gap-2 rounded hover:bg-slate-200/70 px-1 ${
+          !verbose && 'text-neutral-500'
+        }`}
         onClick={() => setVerbose((v) => !v)}
       >
-        <h3 id={id}>
+        <h3 id={id} className="flex items-center text-base text-left">
           <span
             className={`${getMethodColor(
               request?.method as HTTP_METHOD,
               true
-            )} mr-2 rounded p-1 text-base`}
+            )} mr-2 rounded p-1 text-base flex-shrink h-fit w-fit`}
           >
             {request?.method}
           </span>{' '}
