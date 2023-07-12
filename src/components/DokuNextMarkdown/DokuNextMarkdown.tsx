@@ -41,6 +41,9 @@ function DokuNextMarkdown({ children, className }: MarkdownProps) {
       components={{
         h1: HeadingRenderer,
         h2: ({ node, ...props }) => <h2 className="my-4" {...props} />,
+        h3: ({ node, ...props }) => <h3 className="my-4" {...props} />,
+        h4: ({ node, ...props }) => <h4 className="my-4" {...props} />,
+        h5: ({ node, ...props }) => <h5 className="my-4" {...props} />,
         hr: ({ node, ...props }) => (
           <hr className="my-6 border-slate-400/40" {...props} />
         ),
