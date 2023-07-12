@@ -2,6 +2,9 @@
 
 DokuNEXT is simple documentation generator for Postman (currently only supports Postman v2.1 API) that can simpli you use for viewing API Documentation, offline or deployed on hosting.
 
+You can see the demo here -> **https://dokunext.vercel.app/**.
+Just open up and fill the authorization token with `dokunext` and you are ready to go
+
 ## Getting Started
 
 1. To start you have to clone this repo.
