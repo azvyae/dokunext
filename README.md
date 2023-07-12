@@ -21,6 +21,18 @@ DokuNEXT is simple documentation generator for Postman (currently only supports 
    npm run build
    ```
 
+## Features
+
+- API Documentation Generator with markdown support, definition files supported are:
+  - Postman v2.1
+- Organized folder table of contents and anchor links to each API requests
+- Support multiple collections and environments
+- Has simple authorization by providing simple token
+- Examples! It can show multiple examples and its returned response code, code example supported are:
+  - cURL
+- Copy paste code easy
+- Responsive UI
+
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
