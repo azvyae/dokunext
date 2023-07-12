@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
-import { Collections } from '@/components/Sidebar/Sidebar';
 
 interface EssentialPostmanJsonAPI {
   info: any;

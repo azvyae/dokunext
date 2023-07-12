@@ -5,10 +5,15 @@ import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown
 import { TableItemParser } from '@/components/PostmanInterpreter/Partials/TableItemParser';
 import { TableItem } from '@/components/PostmanInterpreter/PostmanInterpreter.types';
 import { isArrayEmpty } from '@/helpers/functions';
-import { useSidebarStore, useTocStore } from '@/store/store';
+import {
+  useEnvironmentStore,
+  useSidebarStore,
+  useTocStore
+} from '@/store/store';
 import { Toc } from '@/store/types';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 import { useCallback, useEffect, useState } from 'react';
+import { shallow } from 'zustand/shallow';
 
 interface EssentialPostmanAPIResponse {
   info: string;
@@ -53,6 +58,13 @@ function CollectionViewer() {
     item: any;
     auth?: TableItem[];
   }>();
+  const { activeEnv, environments } = useEnvironmentStore(
+    (state) => ({
+      activeEnv: state.active,
+      environments: state.environments
+    }),
+    shallow
+  );
 
   const updateCollectionToc = useCallback(
     (info: any, items: any) => {
@@ -104,18 +116,34 @@ function CollectionViewer() {
       let info = collection.info;
       let item = collection.item;
       let auth = collection.auth;
-
       collection.variable.forEach((variable) => {
-        info = JSON.parse(
-          info.replaceAll(`{{${variable.key}}}`, variable.value)
-        );
-        item = JSON.parse(
-          item.replaceAll(`{{${variable.key}}}`, variable.value)
-        );
+        let infoText = info.replaceAll(`{{${variable.key}}}`, variable.value);
+        environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+          infoText =
+            variable.type === 'secret'
+              ? infoText.replaceAll(`{{${variable.key}}}`, '***')
+              : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
+        });
+        info = JSON.parse(infoText);
+
+        let itemText = item.replaceAll(`{{${variable.key}}}`, variable.value);
+        environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+          itemText =
+            variable.type === 'secret'
+              ? itemText.replaceAll(`{{${variable.key}}}`, '***')
+              : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
+        });
+        item = JSON.parse(itemText);
+
         if (auth) {
-          auth = JSON.parse(
-            auth.replaceAll(`{{${variable.key}}}`, variable.value)
-          );
+          let authText = auth.replaceAll(`{{${variable.key}}}`, variable.value);
+          environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+            authText =
+              variable.type === 'secret'
+                ? authText.replaceAll(`{{${variable.key}}}`, '***')
+                : authText.replaceAll(`{{${variable.key}}}`, variable.value);
+          });
+          auth = JSON.parse(authText);
         }
       });
 
@@ -127,7 +155,7 @@ function CollectionViewer() {
 
       updateCollectionToc(info, item);
     },
-    [updateCollectionToc]
+    [activeEnv, environments, updateCollectionToc]
   );
 
   useEffect(() => {

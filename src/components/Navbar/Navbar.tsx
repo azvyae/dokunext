@@ -18,8 +18,8 @@ function Navbar() {
     const currentValue = e.currentTarget.value;
     setActiveEnv(currentValue);
   }
-  const envOptions = environments.map((item) => (
-    <option key={item.value} value={item.value}>
+  const envOptions = environments.map((item, index) => (
+    <option key={item.id} value={index + 1}>
       {item.name}
     </option>
   ));

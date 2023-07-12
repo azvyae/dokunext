@@ -1,12 +1,17 @@
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 
 interface Environment {
+  id: string;
   name: string;
-  value: string;
+  values: {
+    key: string;
+    value: string;
+    type: 'default' | 'secret';
+  }[];
 }
 
 interface EnvironmentState {
-  active: Environment['value'];
+  active: Environment['id'];
   environments: Environment[];
   setActive: (value: string) => void;
   setEnvironments: (environments: Environment[]) => void;

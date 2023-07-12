@@ -1,6 +1,10 @@
 'use client';
-import { useSidebarStore, useTocStore } from '@/store/store';
-import { Toc } from '@/store/types';
+import {
+  useEnvironmentStore,
+  useSidebarStore,
+  useTocStore
+} from '@/store/store';
+import { Environment, Toc } from '@/store/types';
 import Link from 'next/link';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { BiLock as LockIcon } from 'react-icons/bi';
@@ -36,6 +40,12 @@ function Sidebar() {
     (state) => ({
       sidebarOpen: state.open,
       setSidebarState: state.setSidebarState
+    }),
+    shallow
+  );
+  const { setEnviroments } = useEnvironmentStore(
+    (state) => ({
+      setEnviroments: state.setEnvironments
     }),
     shallow
   );
@@ -137,11 +147,12 @@ function Sidebar() {
           throw new Error('HTTP Error: ' + res.status);
         }
       }
-      const collectionResponse = await res.json();
-      return setCollections(collectionResponse.data);
+      const providerReponse = await res.json();
+      setEnviroments(providerReponse.data.environments as Environment[]);
+      return setCollections(providerReponse.data.collections);
     }
     retrieveData();
-  }, [provider]);
+  }, [provider, setEnviroments]);
   return (
     <>
       <Modal ref={insertTokenModal}>

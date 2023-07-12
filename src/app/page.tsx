@@ -11,10 +11,9 @@ import { shallow } from 'zustand/shallow';
 export default function Home() {
   const closeSidebar = useSidebarStore((state) => state.setSidebarState);
 
-  const { setActiveEnv, setEnviroments } = useEnvironmentStore(
+  const { setActiveEnv } = useEnvironmentStore(
     (state) => ({
-      setActiveEnv: state.setActive,
-      setEnviroments: state.setEnvironments
+      setActiveEnv: state.setActive
     }),
     shallow
   );
@@ -23,7 +22,6 @@ export default function Home() {
   useEffect(() => {
     closeSidebar(false);
     setActiveEnv('none');
-    setEnviroments([]);
     setToc([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
