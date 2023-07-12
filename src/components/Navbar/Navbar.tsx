@@ -3,6 +3,7 @@
 import { useEnvironmentStore, useSidebarStore } from '@/store/store';
 import Link from 'next/link';
 import { ChangeEvent } from 'react';
+import { BiLogoGithub } from 'react-icons/bi';
 import { FiSidebar as SidebarIcon } from 'react-icons/fi';
 import { shallow } from 'zustand/shallow';
 function Navbar() {
@@ -44,17 +45,24 @@ function Navbar() {
           dN
         </h1>
       </Link>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <select
           name="environment"
           id="environment-selector"
-          className="px-2 py-2 pr-4 rounded-md md:px-4 text-slate-900"
+          className="px-1 py-1 pr-4 rounded-md md:px-4 text-slate-900"
           value={activeEnv}
           onChange={handleEnvChange}
         >
           <option value="none">No Environment</option>
           {envOptions}
         </select>
+        <a
+          href="https://github.com/azvyae/dokunext"
+          target="_blank"
+          className="hover:text-slate-400 text-slate-50 hover:underline"
+        >
+          <BiLogoGithub size={36} />
+        </a>
         <button
           className="flex items-center justify-center md:hidden"
           onClick={toggleSidebar}

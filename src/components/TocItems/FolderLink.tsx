@@ -1,6 +1,6 @@
 'use client';
-import { useTocDropdownStore } from '@/store/store';
-import { TocDropdownState } from '@/store/types';
+import { useTocStore } from '@/store/store';
+import { TocState } from '@/store/types';
 import Link from 'next/link';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { BiFolder } from 'react-icons/bi';
@@ -15,10 +15,10 @@ interface FolderLinkProps {
 }
 
 function FolderLink({ name, url, children, closeSidebar }: FolderLinkProps) {
-  const { dropdown, toggleDropdown, setFolders } = useTocDropdownStore(
+  const { folders, toggleDropdown, setFolders } = useTocStore(
     (state) => ({
-      dropdown: state.folders,
-      toggleDropdown: state.toggleVerbose,
+      folders: state.folders,
+      toggleDropdown: state.toggleDropdown,
       setFolders: state.setFolders
     }),
     shallow
@@ -33,7 +33,7 @@ function FolderLink({ name, url, children, closeSidebar }: FolderLinkProps) {
           className="flex items-center flex-shrink-0 gap-2"
           onClick={() => toggleDropdown(url)}
         >
-          {dropdown[url]?.verbose ? (
+          {folders[url]?.opened ? (
             <FaChevronDown size={12} />
           ) : (
             <FaChevronRight size={12} />
@@ -51,7 +51,7 @@ function FolderLink({ name, url, children, closeSidebar }: FolderLinkProps) {
       {children ? (
         <div
           className={`ml-4 ${
-            dropdown[url]?.verbose ? 'block' : 'hidden'
+            folders[url]?.opened ? 'block' : 'hidden'
           } flex flex-col gap-2`}
         >
           {children}

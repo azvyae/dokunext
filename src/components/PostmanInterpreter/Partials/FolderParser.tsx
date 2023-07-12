@@ -1,6 +1,6 @@
 import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
 import { isArrayEmpty } from '@/helpers/functions';
-import { useTocDropdownStore } from '@/store/store';
+import { useTocStore } from '@/store/store';
 import {
   FaChevronDown as DownIcon,
   FaChevronUp as UpIcon
@@ -16,10 +16,10 @@ interface FolderParserProps {
 }
 
 function FolderParser({ item, index, level, renderItems }: FolderParserProps) {
-  const { dropdown, toggleDropdown } = useTocDropdownStore(
+  const { folders, toggleDropdown } = useTocStore(
     (state) => ({
-      dropdown: state.folders,
-      toggleDropdown: state.toggleVerbose
+      folders: state.folders,
+      toggleDropdown: state.toggleDropdown
     }),
     shallow
   );
@@ -30,22 +30,22 @@ function FolderParser({ item, index, level, renderItems }: FolderParserProps) {
     <div className="pl-2 border-l">
       <button
         className={`flex items-center justify-between gap-2 w-full rounded hover:bg-slate-200/70 px-1 ${
-          !dropdown[`#${id}`]?.verbose && 'text-neutral-500'
+          !folders[`#${id}`]?.opened && 'text-neutral-500'
         }`}
         onClick={() => toggleDropdown(`#${id}`)}
       >
         <h3
           className={`text-left text-base ${
-            !dropdown[`#${id}`]?.verbose && 'text-neutral-500'
+            !folders[`#${id}`]?.opened && 'text-neutral-500'
           }`}
           id={id}
         >
           📁 {item.name}
         </h3>
-        {dropdown[`#${id}`]?.verbose ? <UpIcon /> : <DownIcon />}
+        {folders[`#${id}`]?.opened ? <UpIcon /> : <DownIcon />}
       </button>
 
-      {dropdown[`#${id}`]?.verbose && (
+      {folders[`#${id}`]?.opened && (
         <>
           <DokuNextMarkdown>{item.description ?? ''}</DokuNextMarkdown>
           {!isArrayEmpty(item.auth) && (

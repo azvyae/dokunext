@@ -32,24 +32,14 @@ interface Toc {
 
 interface TocState {
   toc: Toc[];
-  setToc: (toc: Toc[]) => void;
-}
-
-interface TocDropdownState {
   folders: {
     [x: string]: {
-      verbose: boolean;
+      opened: boolean;
     };
   };
-  toggleVerbose: (id: string) => void;
+  setToc: (toc: Toc[]) => void;
+  toggleDropdown: (id: string) => void;
   setFolders: (id: string) => void;
 }
 
-export type {
-  Environment,
-  EnvironmentState,
-  SidebarState,
-  TocState,
-  TocDropdownState,
-  Toc
-};
+export type { Environment, EnvironmentState, SidebarState, Toc, TocState };

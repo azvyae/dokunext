@@ -7,7 +7,7 @@ import {
 } from '@/store/store';
 import { useEffect } from 'react';
 import { shallow } from 'zustand/shallow';
-
+import { styles } from './page.styles';
 export default function Home() {
   const closeSidebar = useSidebarStore((state) => state.setSidebarState);
 
@@ -23,26 +23,20 @@ export default function Home() {
     closeSidebar(false);
     setActiveEnv('none');
     setToc([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [closeSidebar, setActiveEnv, setToc]);
 
   return (
-    <>
-      <h3 className="mb-4 text-2xl font-bold md:text-4xl">
-        dokuNEXT Simple API Documentation Viewer
-      </h3>
-      <p className="text-lg leading-relaxed md:text-2xl">
+    <div className={styles.div}>
+      <h1 className={styles.h1}>dokuNEXT Simple API Documentation Viewer</h1>
+      <p className="text-lg leading-relaxed md:text-xl">
         Start navigating by pick collections that will you use. Currently only
         support Postman v2.1 collection and environment files. Feel free if you
-        want to contribute for this open source project, you can find out{' '}
-        <a
-          href="https://github.com/azvyae/dokunext"
-          target="_blank"
-          className="hover:text-sky-700 hover:underline text-sky-500"
-        >
-          here
+        want to contribute for this open source project, you can check our
+        GitHub{' '}
+        <a href="https://github.com/azvyae/dokunext" className={styles.a}>
+          https://github.com/azvyae/dokunext
         </a>
       </p>
-    </>
+    </div>
   );
 }

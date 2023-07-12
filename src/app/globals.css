@@ -28,6 +28,7 @@ li li:before {
   counter-increment: item;
   content: '-';
 }
+
 * {
   @apply scroll-m-24 !scroll-smooth;
 }

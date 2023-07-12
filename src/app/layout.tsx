@@ -1,31 +1,24 @@
 import { Footer, Navbar, Sidebar } from '@/components';
-import './globals.css';
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans } from 'next/font/google';
-
-const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'] });
-
+import './globals.css';
+import { styles } from './layout.styles';
 const metadata: Metadata = {
   title: 'dokuNEXT API',
-  description: 'DokuNEXT, documentation parser for Postman'
+  description: 'DokuNEXT, simple API documentation parser for Postman.'
 };
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${plusJakartaSans.className} flex flex-col justify-between min-h-screen`}
-      >
+      <body className={styles.body}>
         <header>
           <Navbar />
         </header>
-        <div className="relative grid flex-grow md:grid-cols-6">
+        <div className={styles.div}>
           <Sidebar />
-          <main className="w-full px-4 pt-24 pb-4 overflow-auto md:col-span-4 lg:col-span-5">
-            {children}
-          </main>
+          <main className={styles.main}>{children}</main>
         </div>
-        <footer className="p-2 dark:bg-neutral-900 bg-neutral-300">
+        <footer className={styles.footer}>
           <Footer />
         </footer>
       </body>
