@@ -5,7 +5,7 @@ import { Environment } from '@/store/types';
 import { readFileSync } from 'fs';
 
 export async function GET(request: Request) {
-  const apiDir = `${process.env.PWD}/api/postman`;
+  const apiDir = `${process.cwd()}/json/postman`;
   let collections: Collections[] = [];
   try {
     collections = (await readdir(`${apiDir}/collections`))

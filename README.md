@@ -9,9 +9,9 @@ DokuNEXT is simple documentation generator for Postman (currently only supports 
     ```bash
     git clone https://github.com/azvyae/dokunext
     ```
-2. Update your `.gitignore` file to allow `api/postman/collections/*` and `api/postman/environments/*` folder being updated to for git.
+2. Update your `.gitignore` file to allow `json/postman/collections/*` and `json/postman/environments/*` folder being updated to for git.
 
-3. Export Postman v2.1 collection json file and put it to `api/postman/collections` folder. You may also want to export environments and put it to `api/postman/environments/*` folder.
+3. Export Postman v2.1 collection json file and put it to `json/postman/collections` folder. You may also want to export environments and put it to `json/postman/environments/*` folder.
 
 4. Add `.env` file to root of your project providing `SECRET_TOKEN` key and its value. You can also provide `SECRET_TOKEN` environment variable to your hosting.
 

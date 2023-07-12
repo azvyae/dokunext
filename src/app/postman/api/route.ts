@@ -12,7 +12,7 @@ async function GET(request: NextRequest) {
   const collectionPath = request.nextUrl.searchParams.get(
     'collection'
   ) as string;
-  const apiDir = `${process.env.PWD}/api/postman/collections/${decodeURI(
+  const apiDir = `${process.cwd()}/json/postman/collections/${decodeURI(
     collectionPath
   )}`;
   let contents: EssentialPostmanJsonAPI;
