@@ -151,7 +151,7 @@ function CollectionViewer() {
     <>
       {loading && <p className="text-3xl">Loading...</p>}
       {!loading && (
-        <div className="prose prose-h3:text-xl prose-h4:text-lg marker:text-orange-500 prose-h1:text-3xl prose-h2:text-2xl">
+        <div className="prose max-w-none prose-h3:text-xl prose-h4:text-lg prose-headings:my-4 marker:text-orange-500 prose-h1:text-3xl prose-h2:text-2xl">
           <h1 className="text-3xl font-bold ">
             {collectionDisplay?.info.name}
           </h1>
