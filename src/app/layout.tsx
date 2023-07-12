@@ -14,7 +14,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <header>
           <Navbar />
         </header>
-        <div className={styles.content}>
+        <div className={styles.div}>
           <Sidebar />
           <main className={styles.main}>{children}</main>
         </div>
