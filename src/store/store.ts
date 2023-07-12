@@ -1,7 +1,11 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { EnvironmentState, SidebarState, TocState } from './types';
-
+import {
+  EnvironmentState,
+  SidebarState,
+  TocDropdownState,
+  TocState
+} from './types';
 const useEnvironmentStore = create<EnvironmentState>()(
   devtools((set) => ({
     active: 'none',
@@ -32,4 +36,33 @@ const useTocStore = create<TocState>((set) => ({
   }
 }));
 
-export { useEnvironmentStore, useSidebarStore, useTocStore };
+const useTocDropdownStore = create<TocDropdownState>((set) => ({
+  folders: {},
+  toggleVerbose(id) {
+    set((state) => ({
+      folders: {
+        ...state.folders,
+        [id]: {
+          verbose: !state.folders[id].verbose
+        }
+      }
+    }));
+  },
+  setFolders(id) {
+    set((state) => ({
+      folders: {
+        ...state.folders,
+        [id]: {
+          verbose: false
+        }
+      }
+    }));
+  }
+}));
+
+export {
+  useEnvironmentStore,
+  useSidebarStore,
+  useTocStore,
+  useTocDropdownStore
+};

@@ -20,7 +20,6 @@ function PostmanInterpreter({ items }: PostmanInterpreterProps) {
         return (
           <div key={item.name} className={`pr-4 ${level > 0 && 'ml-2'}`}>
             <FolderParser {...{ item, index, renderItems, level }} />
-            {level === 0 && <hr className="border-slate-400/40" />}
           </div>
         );
       } else if (item.request && item.response) {
