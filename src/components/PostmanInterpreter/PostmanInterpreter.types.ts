@@ -15,6 +15,7 @@ interface ApiResponse {
   header?: TableItem[];
   cookie: any[];
   body: string;
+  _postman_previewlanguage?: string;
 }
 
 interface Url {

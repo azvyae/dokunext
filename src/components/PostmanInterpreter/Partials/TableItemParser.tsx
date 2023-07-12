@@ -2,7 +2,7 @@ import React from 'react';
 
 interface TableItemParserProps {
   item: any;
-  title: string;
+  title?: string;
   message?: string;
 }
 
@@ -14,12 +14,14 @@ function TableItemParser({ item, title, message }: TableItemParserProps) {
     }[]) ?? item;
   return (
     <>
-      <h4>
-        {title}{' '}
-        <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
-          {item.type}
-        </span>
-      </h4>
+      {title && (
+        <h4>
+          {title}{' '}
+          <span className="ml-2 font-mono text-sm font-normal text-neutral-500">
+            {item.type}
+          </span>
+        </h4>
+      )}
       {message && <p className="mb-2">{message}</p>}
       <table className="table mt-0 text-sm border border-slate-700">
         <tbody>
