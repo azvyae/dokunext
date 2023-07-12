@@ -1,4 +1,4 @@
-interface RequestBody {
+interface ApiRequest {
   method: string;
   header: TableItem[];
   url: Url;
@@ -7,9 +7,9 @@ interface RequestBody {
   auth?: TableItem[];
 }
 
-interface ResponseBody {
+interface ApiResponse {
   name: string;
-  originalRequest: RequestBody;
+  originalRequest: ApiRequest;
   status: string;
   code: number;
   header?: TableItem[];
@@ -36,10 +36,10 @@ interface Item {
   name: string;
   item?: Item[];
   event?: Event[];
-  request?: RequestBody;
-  response?: ResponseBody[];
+  request?: ApiRequest;
+  response?: ApiResponse[];
   description?: string;
   auth?: TableItem[];
 }
 
-export type { Item, RequestBody, ResponseBody, Url, TableItem };
+export type { Item, ApiRequest, ApiResponse, Url, TableItem };

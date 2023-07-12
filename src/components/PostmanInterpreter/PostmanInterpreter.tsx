@@ -1,11 +1,12 @@
 'use client';
+import { useState } from 'react';
 import { FolderParser } from './Partials/FolderParser';
 import { PostmanItemParser } from './Partials/PostmanItemParser';
-import { Item, RequestBody } from './PostmanInterpreter.types';
+import { Item, ApiRequest } from './PostmanInterpreter.types';
 
 interface Example {
   name: string;
-  request: RequestBody;
+  request: ApiRequest;
 }
 
 interface PostmanInterpreterProps {
@@ -17,7 +18,7 @@ function PostmanInterpreter({ items }: PostmanInterpreterProps) {
     return items.map((item, index) => {
       if (item.item) {
         return (
-          <div key={item.name}>
+          <div key={item.name} className={`pr-4 ${level > 0 && 'ml-2'}`}>
             <FolderParser {...{ item, index, renderItems, level }} />
             {level === 0 && <hr className="border-slate-400/40" />}
           </div>

@@ -63,7 +63,7 @@ function FormBodyParser({ body }: BodyProps) {
   );
 }
 
-function BodyRequestParser({ body }: BodyProps) {
+function ApiRequestParser({ body }: BodyProps) {
   return (
     <>
       <h4>
@@ -86,4 +86,4 @@ function BodyRequestParser({ body }: BodyProps) {
   );
 }
 
-export { BodyRequestParser };
+export { ApiRequestParser };
