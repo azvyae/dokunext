@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { EnvironmentState, SidebarState, TocState } from './types';
+import { EnvironmentState, SidebarState, TocState } from './store.types';
 
 const useEnvironmentStore = create<EnvironmentState>()(
   devtools((set) => ({
