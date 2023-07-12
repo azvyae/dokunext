@@ -30,6 +30,8 @@ interface TableItem {
   key: string;
   value?: string;
   description?: string;
+  type?: string;
+  disabled?: boolean;
 }
 
 interface Item {

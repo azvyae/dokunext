@@ -20,6 +20,10 @@
   @apply bg-[#9ba6d3] rounded-full;
 }
 
+code {
+  @apply !whitespace-pre-wrap;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-[#5364aa];
 }

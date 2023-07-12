@@ -91,7 +91,7 @@ function DokuNextMarkdown({ children, className }: MarkdownProps) {
           ) : (
             <code
               {...props}
-              className={`${className} text-indigo-700 break-words`}
+              className={`${className} text-indigo-700 break-words whitespace-pre-wrap`}
             >
               {children}
             </code>

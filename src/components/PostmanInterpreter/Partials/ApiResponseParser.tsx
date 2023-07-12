@@ -1,6 +1,8 @@
 import { ChangeEvent, useState } from 'react';
 import { ApiResponse } from '../PostmanInterpreter.types';
 import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown';
+import { generateCurlCommand, isArrayEmpty } from '@/helpers/functions';
+import { TableItemParser } from './TableItemParser';
 
 interface ApiResponseParser {
   response: ApiResponse[];
@@ -12,19 +14,19 @@ function ApiResponseParser({ response }: ApiResponseParser) {
   >();
 
   function handleApiResponseChange(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedResponseVal = parseInt(event.target.value);
+    const selectedResponseVal = parseInt(event.target.value) - 1;
     setSelectedResponse(response[selectedResponseVal]);
   }
   function renderApiResponses(responses: ApiResponse[]) {
     return (
       <select
-        className="border rounded border-slate-500"
+        className="py-1 font-mono border rounded border-slate-500"
         onChange={handleApiResponseChange}
       >
         <option value="">Select an example</option>
         {responses.map((response, index) => (
           <option key={index + 1} value={index + 1}>
-            {response.name}
+            [{response.code}] {response.name}
           </option>
         ))}
       </select>
@@ -32,17 +34,16 @@ function ApiResponseParser({ response }: ApiResponseParser) {
   }
   return (
     <div>
-      <div className="grid items-center grid-cols-2">
-        <h4>🟪 Example</h4>
+      <div className="flex items-center">
+        <h4 className="flex-grow">🟪 Example</h4>
         {renderApiResponses(response)}
       </div>
-      <div className="overflow-auto border">
+      <div className="p-1 overflow-auto border">
         {selectedResponse?.originalRequest?.url?.raw && (
-          <DokuNextMarkdown>{`\`\`\`url\n${
-            selectedResponse?.originalRequest?.url?.raw ?? '[no url provided]'
-          }\n\`\`\``}</DokuNextMarkdown>
+          <DokuNextMarkdown>
+            {generateCurlCommand(selectedResponse.originalRequest)}
+          </DokuNextMarkdown>
         )}
-        {JSON.stringify(selectedResponse)}
       </div>
       {/* {selectedResponse &&
             selectedResponse.name === response[0].name && (
