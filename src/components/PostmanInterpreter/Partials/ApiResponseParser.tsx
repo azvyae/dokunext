@@ -92,7 +92,9 @@ function ApiResponseParser({ response }: ApiResponseParser) {
             )}
             {selectedResponse?.header && viewResponse === 'headers' && (
               <div className="pt-2">
-                <TableItemParser item={selectedResponse.header} />
+                <TableItemParser
+                  item={{ type: 'header', header: selectedResponse.header }}
+                />
               </div>
             )}
           </div>
