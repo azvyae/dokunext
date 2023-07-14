@@ -187,7 +187,6 @@ function CollectionViewer() {
       {!loading && (
         <div className="max-w-6xl prose prose-code:whitespace-pre-wrap md:prose-h3:text-xl prose-h3:text-lg prose-h4:text-base md:prose-h4:text-lg prose-headings:my-4 marker:text-orange-500 md:prose-h1:text-3xl prose-h1:text-2xl prose-h2:text-xl md:prose-h2:text-2xl">
           <h1 className="italic font-bold ">{collectionDisplay?.info.name}</h1>
-          <hr className="my-6 border-slate-400" />
           <DokuNextMarkdown>
             {collectionDisplay?.info.description}
           </DokuNextMarkdown>
