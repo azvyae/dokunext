@@ -64,7 +64,12 @@ function PostmanItemParser({
             />
           )}
           {!isArrayEmpty(request.header) && (
-            <TableItemParser title="✍🏼 Request Header" item={request.header} />
+            <>
+              <TableItemParser
+                title="✍🏼 Request Header"
+                item={{ type: 'header', header: request.header }}
+              />
+            </>
           )}
 
           {!isArrayEmpty(request.url?.variable) && (
