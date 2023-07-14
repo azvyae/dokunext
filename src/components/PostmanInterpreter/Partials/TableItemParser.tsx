@@ -11,7 +11,7 @@ function TableItemParser({ item, title, message }: TableItemParserProps) {
     (item[item.type] as {
       key: string;
       value: string;
-    }[]) ?? item;
+    }[]) ?? [];
   return (
     <>
       {title && (
