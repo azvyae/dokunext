@@ -72,17 +72,17 @@ function PostmanItemParser({
             </>
           )}
 
-          {!isArrayEmpty(request.url?.variable) && (
+         {!isArrayEmpty(request.url?.variable) && (
             <TableItemParser
               title="❓ Path Variables"
-              item={request.url.variable}
+              item={{ type: 'path_vars', path_vars: request.url.variable }}
             />
           )}
 
           {!isArrayEmpty(request.url?.query) && (
             <TableItemParser
               title="🔍 Query Parameters"
-              item={request.url.query}
+              item={{ type: 'query_params', query_params: request.url.query }}
             />
           )}
           {request.body && <ApiRequestParser body={request.body} />}
