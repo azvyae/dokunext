@@ -1,0 +1,15 @@
+{
+  "id": "930324ed-093c-44e8-8d0b-f13dc65829aa",
+  "values": [
+    {
+      "key": "someGlobal",
+      "value": "global-value",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "name": "Globals",
+  "_postman_variable_scope": "globals",
+  "_postman_exported_at": "2023-07-15T05:15:00.429Z",
+  "_postman_exported_using": "Postman/10.15.8"
+}

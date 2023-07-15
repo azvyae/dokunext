@@ -10,6 +10,8 @@ interface Environment {
   }[];
 }
 
+type Globals = Environment;
+
 interface EnvironmentState {
   active: Environment['id'];
   environments: Environment[];
@@ -42,4 +44,11 @@ interface TocState {
   setFolders: (id: string) => void;
 }
 
-export type { Environment, EnvironmentState, SidebarState, Toc, TocState };
+export type {
+  Environment,
+  EnvironmentState,
+  Globals,
+  SidebarState,
+  Toc,
+  TocState
+};

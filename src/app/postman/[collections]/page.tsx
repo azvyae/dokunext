@@ -19,6 +19,7 @@ interface EssentialPostmanAPIResponse {
   info: string;
   item: string;
   auth?: any;
+  globals: any[];
   variable: any[];
 }
 
@@ -127,26 +128,40 @@ function CollectionViewer() {
           authText = authText.replaceAll(`{{${variable.key}}}`, variable.value);
         }
       });
+
+      collection.globals.forEach((variable) => {
+        infoText =
+          variable.type === 'secret'
+            ? infoText.replaceAll(`{{${variable.key}}}`, '***')
+            : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
+        itemText =
+          variable.type === 'secret'
+            ? itemText.replaceAll(`{{${variable.key}}}`, '***')
+            : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
+        if (authText) {
+          authText =
+            variable.type === 'secret'
+              ? authText.replaceAll(`{{${variable.key}}}`, '***')
+              : authText.replaceAll(`{{${variable.key}}}`, variable.value);
+        }
+      });
+
       environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
         infoText =
           variable.type === 'secret'
             ? infoText.replaceAll(`{{${variable.key}}}`, '***')
             : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
-      });
-      environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
         itemText =
           variable.type === 'secret'
             ? itemText.replaceAll(`{{${variable.key}}}`, '***')
             : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
-      });
-      if (authText) {
-        environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+        if (authText) {
           authText =
             variable.type === 'secret'
               ? authText.replaceAll(`{{${variable.key}}}`, '***')
               : authText.replaceAll(`{{${variable.key}}}`, variable.value);
-        });
-      }
+        }
+      });
 
       const { info, item, auth } = {
         info: JSON.parse(infoText),
