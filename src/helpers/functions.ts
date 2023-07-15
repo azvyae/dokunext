@@ -4,7 +4,7 @@ import {
 } from '@/components/PostmanInterpreter/PostmanInterpreter.types';
 
 function isArrayEmpty(value?: any[]) {
-  if (!value) {
+  if (!value || typeof value.length === 'undefined' || value.length === 0) {
     return true;
   }
   return value.length === 0;

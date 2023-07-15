@@ -93,16 +93,18 @@ function CollectionViewer() {
 
       const toc: Toc[] = [];
       const regex = /^# .*/gm;
-      toc.push(
-        ...[...info.description.matchAll(regex)].map((item) => {
-          const target = item[0];
-          return {
-            name: target.replace('# ', ''),
-            url: target.toLowerCase().replace('# ', '#')
-          };
-        }),
-        ...mapItem(items)
-      );
+      if (info.description) {
+        toc.push(
+          ...[...info.description.matchAll(regex)].map((item) => {
+            const target = item[0];
+            return {
+              name: target.replace('# ', ''),
+              url: target.toLowerCase().replace('# ', '#')
+            };
+          })
+        );
+      }
+      toc.push(...mapItem(items));
       setToc(toc);
     },
     [setToc]
@@ -113,40 +115,44 @@ function CollectionViewer() {
       if (!collection) {
         return;
       }
-      let info = collection.info;
-      let item = collection.item;
-      let auth = collection.auth;
-      collection.variable.forEach((variable) => {
-        let infoText = info.replaceAll(`{{${variable.key}}}`, variable.value);
-        environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
-          infoText =
-            variable.type === 'secret'
-              ? infoText.replaceAll(`{{${variable.key}}}`, '***')
-              : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
-        });
-        info = JSON.parse(infoText);
+      let infoText = collection.info;
+      let itemText = collection.item;
+      let authText = collection.auth;
+      collection.variable?.forEach((variable) => {
+        infoText = infoText.replaceAll(`{{${variable.key}}}`, variable.value);
 
-        let itemText = item.replaceAll(`{{${variable.key}}}`, variable.value);
-        environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
-          itemText =
-            variable.type === 'secret'
-              ? itemText.replaceAll(`{{${variable.key}}}`, '***')
-              : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
-        });
-        item = JSON.parse(itemText);
+        itemText = itemText.replaceAll(`{{${variable.key}}}`, variable.value);
 
-        if (auth) {
-          let authText = auth.replaceAll(`{{${variable.key}}}`, variable.value);
-          environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
-            authText =
-              variable.type === 'secret'
-                ? authText.replaceAll(`{{${variable.key}}}`, '***')
-                : authText.replaceAll(`{{${variable.key}}}`, variable.value);
-          });
-          auth = JSON.parse(authText);
+        if (authText) {
+          authText = authText.replaceAll(`{{${variable.key}}}`, variable.value);
         }
       });
+      environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+        infoText =
+          variable.type === 'secret'
+            ? infoText.replaceAll(`{{${variable.key}}}`, '***')
+            : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
+      });
+      environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+        itemText =
+          variable.type === 'secret'
+            ? itemText.replaceAll(`{{${variable.key}}}`, '***')
+            : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
+      });
+      if (authText) {
+        environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
+          authText =
+            variable.type === 'secret'
+              ? authText.replaceAll(`{{${variable.key}}}`, '***')
+              : authText.replaceAll(`{{${variable.key}}}`, variable.value);
+        });
+      }
 
+      const { info, item, auth } = {
+        info: JSON.parse(infoText),
+        item: JSON.parse(itemText),
+        auth: JSON.parse(authText ?? '{}')
+      };
       setCollectionDisplay({
         info,
         item,
@@ -181,7 +187,6 @@ function CollectionViewer() {
       {!loading && (
         <div className="max-w-6xl prose prose-code:whitespace-pre-wrap md:prose-h3:text-xl prose-h3:text-lg prose-h4:text-base md:prose-h4:text-lg prose-headings:my-4 marker:text-orange-500 md:prose-h1:text-3xl prose-h1:text-2xl prose-h2:text-xl md:prose-h2:text-2xl">
           <h1 className="italic font-bold ">{collectionDisplay?.info.name}</h1>
-          <hr className="my-6 border-slate-400" />
           <DokuNextMarkdown>
             {collectionDisplay?.info.description}
           </DokuNextMarkdown>
