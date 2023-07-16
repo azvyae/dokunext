@@ -5,49 +5,14 @@ import { DokuNextMarkdown } from '@/components/DokuNextMarkdown/DokuNextMarkdown
 import { TableItemParser } from '@/components/PostmanInterpreter/Partials/TableItemParser';
 import { TableItem } from '@/components/PostmanInterpreter/PostmanInterpreter.types';
 import { isArrayEmpty } from '@/helpers/functions';
-import {
-  useEnvironmentStore,
-  useSidebarStore,
-  useTocStore
-} from '@/store/store';
+import { useEnvironmentStore, useSidebarStore, useTocStore } from '@/store/store';
 import { Toc } from '@/store/types';
-import { HTTP_METHOD } from 'next/dist/server/web/http';
 import { useCallback, useEffect, useState } from 'react';
 import { shallow } from 'zustand/shallow';
-
-interface EssentialPostmanAPIResponse {
-  info: string;
-  item: string;
-  auth?: any;
-  globals: any[];
-  variable: any[];
-}
-
-interface PostmanItemsApi {
-  name: string;
-  item?: PostmanItemsApi[];
-  request?: {
-    method: HTTP_METHOD;
-  };
-}
-
-async function getCollection(token: string | null, collection: string) {
-  const res = await fetch(
-    `/postman/api?` +
-      new URLSearchParams({
-        collection: collection
-      }),
-    {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-  return res;
-}
+import { getCollection } from '@/fetcher/getCollection';
+import { mapItem } from '@/app/postman/[collections]/mapItem';
+import { EssentialPostmanAPIResponse } from '@/app/postman/[collections]/types';
+import { extractData } from '@/app/postman/[collections]/extractData';
 
 function CollectionViewer() {
   const setToc = useTocStore((state) => state.setToc);
@@ -69,29 +34,6 @@ function CollectionViewer() {
 
   const updateCollectionToc = useCallback(
     (info: any, items: any) => {
-      function mapItem(items: PostmanItemsApi[], level: number = 0): any {
-        return items.map((item, index) => {
-          // is folder
-          if (item.item) {
-            return {
-              name: item.name,
-              url: `#${level}_${index}_${encodeURIComponent(
-                item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
-              )}`,
-              items: mapItem(item.item, level + 1)
-            };
-          }
-          // is request
-          return {
-            name: item.name,
-            url: `#${level}_${index}_${encodeURIComponent(
-              item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
-            )}`,
-            method: item.request?.method
-          };
-        });
-      }
-
       const toc: Toc[] = [];
       const regex = /^# .*/gm;
       if (info.description) {
@@ -116,58 +58,7 @@ function CollectionViewer() {
       if (!collection) {
         return;
       }
-      let infoText = collection.info;
-      let itemText = collection.item;
-      let authText = collection.auth;
-      collection.variable?.forEach((variable) => {
-        infoText = infoText.replaceAll(`{{${variable.key}}}`, variable.value);
-
-        itemText = itemText.replaceAll(`{{${variable.key}}}`, variable.value);
-
-        if (authText) {
-          authText = authText.replaceAll(`{{${variable.key}}}`, variable.value);
-        }
-      });
-
-      collection.globals.forEach((variable) => {
-        infoText =
-          variable.type === 'secret'
-            ? infoText.replaceAll(`{{${variable.key}}}`, '***')
-            : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
-        itemText =
-          variable.type === 'secret'
-            ? itemText.replaceAll(`{{${variable.key}}}`, '***')
-            : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
-        if (authText) {
-          authText =
-            variable.type === 'secret'
-              ? authText.replaceAll(`{{${variable.key}}}`, '***')
-              : authText.replaceAll(`{{${variable.key}}}`, variable.value);
-        }
-      });
-
-      environments[parseInt(activeEnv) - 1]?.values.forEach((variable) => {
-        infoText =
-          variable.type === 'secret'
-            ? infoText.replaceAll(`{{${variable.key}}}`, '***')
-            : infoText.replaceAll(`{{${variable.key}}}`, variable.value);
-        itemText =
-          variable.type === 'secret'
-            ? itemText.replaceAll(`{{${variable.key}}}`, '***')
-            : itemText.replaceAll(`{{${variable.key}}}`, variable.value);
-        if (authText) {
-          authText =
-            variable.type === 'secret'
-              ? authText.replaceAll(`{{${variable.key}}}`, '***')
-              : authText.replaceAll(`{{${variable.key}}}`, variable.value);
-        }
-      });
-
-      const { info, item, auth } = {
-        info: JSON.parse(infoText),
-        item: JSON.parse(itemText),
-        auth: JSON.parse(authText ?? '{}')
-      };
+      const { info, item, auth } = extractData(collection, environments, activeEnv);
       setCollectionDisplay({
         info,
         item,
