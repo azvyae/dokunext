@@ -71,12 +71,15 @@
 		},
 		{
 			"name": "Authenticate User",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"azvyae@example.app\",\n  \"password\": \"example2048\"\n}",
+					"raw": "{\n  \"email\": \"azvya@example.app\",\n  \"password\": \"example2048\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,7 +104,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"azvyae@example.app\",\n  \"password\": \"example2048\"\n}",
+							"raw": "{\n  \"email\": \"azvya@example.app\",\n  \"password\": \"example2048\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -212,7 +215,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"azvyae@example.app\",\n  \"password\": \"bad-password\"\n}",
+							"raw": "{\n  \"email\": \"azvya@example.app\",\n  \"password\": \"bad-password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -278,7 +281,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"azvyae@example.app\",\n  \"password\": \"example2048\"\n}",
+							"raw": "{\n  \"email\": \"azvya@example.app\",\n  \"password\": \"example2048\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -335,6 +338,9 @@
 		},
 		{
 			"name": "Get Foods",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
 				"method": "GET",
 				"header": [
