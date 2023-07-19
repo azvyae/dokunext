@@ -1,6 +1,6 @@
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 
-export interface EssentialPostmanAPIResponse {
+interface EssentialPostmanAPIResponse {
   info: string;
   item: string;
   auth?: any;
@@ -8,10 +8,13 @@ export interface EssentialPostmanAPIResponse {
   variable: any[];
 }
 
-export interface PostmanItemsApi {
+interface PostmanItemsApi {
   name: string;
   item?: PostmanItemsApi[];
   request?: {
     method: HTTP_METHOD;
   };
 }
+
+
+export type { EssentialPostmanAPIResponse, PostmanItemsApi };
