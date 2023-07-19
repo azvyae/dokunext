@@ -9,10 +9,8 @@ import { useEnvironmentStore, useSidebarStore, useTocStore } from '@/store/store
 import { Toc } from '@/store/types';
 import { useCallback, useEffect, useState } from 'react';
 import { shallow } from 'zustand/shallow';
-import { getCollection } from '@/fetcher/getCollection';
-import { mapItem } from '@/app/postman/[collections]/mapItem';
 import { EssentialPostmanAPIResponse } from '@/app/postman/[collections]/types';
-import { extractData } from '@/app/postman/[collections]/extractData';
+import { extractData, getCollection, mapItem } from '@/app/postman/[collections]/service';
 
 function CollectionViewer() {
   const setToc = useTocStore((state) => state.setToc);

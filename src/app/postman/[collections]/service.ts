@@ -1,7 +1,30 @@
-import { EssentialPostmanAPIResponse } from '@/app/postman/[collections]/types';
+import { EssentialPostmanAPIResponse, PostmanItemsApi } from '@/app/postman/[collections]/types';
 import { Environment } from '@/store/types';
 
-export function extractData(collection: EssentialPostmanAPIResponse, environments: Environment[], activeEnv: string) {
+function mapItem(items: PostmanItemsApi[], level: number = 0): any {
+  return items.map((item, index) => {
+    // is folder
+    if (item.item) {
+      return {
+        name: item.name,
+        url: `#${level}_${index}_${encodeURIComponent(
+          item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
+        )}`,
+        items: mapItem(item.item, level + 1)
+      };
+    }
+    // is request
+    return {
+      name: item.name,
+      url: `#${level}_${index}_${encodeURIComponent(
+        item.name.replaceAll('/', '_').replaceAll(/\s/gm, '_')
+      )}`,
+      method: item.request?.method
+    };
+  });
+}
+
+function extractData(collection: EssentialPostmanAPIResponse, environments: Environment[], activeEnv: string) {
   let infoText = collection.info;
   let itemText = collection.item;
   let authText = collection.auth;
@@ -56,3 +79,23 @@ export function extractData(collection: EssentialPostmanAPIResponse, environment
   };
   return { info, item, auth };
 }
+
+async function getCollection(token: string | null, collection: string) {
+  const res = await fetch(
+    `/postman/api?` +
+    new URLSearchParams({
+      collection: collection
+    }),
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  return res;
+}
+
+export {extractData, mapItem, getCollection}
